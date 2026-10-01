@@ -1,0 +1,3 @@
+- **High — `src/access.mjs:2`: Assignment grants unauthorized access and mutates the user.** For `{ role: "viewer" }`, `user.role = "admin"` changes the role and evaluates to the truthy string `"admin"`, so `canDelete` returns `true`. This violates both requirements. Replace the assignment with strict equality (`===`) to authorize only the exact `"admin"` role without modifying `user`.
+
+Proposed regression check: assert that `"admin"` returns `true`, while `"viewer"`, `"Admin"`, and a missing role return `false`; assert each user object remains unchanged after the call. **Not executed**, as requested; the finding is based on source inspection.

@@ -1,49 +1,44 @@
 # Improvement Plan
 
-This iteration strengthens the existing single-agent instructions, packaging, and verification. It preserves the original adapter paths and source-first contribution workflow.
+The first iteration strengthened the existing single-assistant instructions. The next iteration adds modular skills, project-local installation, and repeatable engineering demonstrations.
 
-## Delivery scope
+## First iteration: delivered
 
-- Compact core instructions with twelve roles, including Security Engineer and Code Reviewer.
+- Compact core with twelve roles, including Security Engineer and Code Reviewer.
 - Proportional workflows, trust boundaries, capability limits, and evidence-based reporting.
-- Improved reference examples for integer-cent money and failed operations.
-- Lean Claude project guidance and a dedicated Windsurf adapter.
-- A knowledge-only bundle for attached or accessible references.
-- Source, adapter, budget, and drift checks with a combined `npm run check` command.
-- An executable account example, manual evaluation scenarios, and updated installation/contribution guides.
+- Integer-cent examples and failed-operation boundaries.
+- Lean Claude project guidance, dedicated Windsurf guidance, and a reference-only bundle.
+- Source, adapter, budget, and drift checks; `npm run check`.
+- An executable account example, eight manual evaluation scenarios, and bilingual guides.
 
-The full Claude skill/subagent and Cursor payloads remain available. This iteration does not introduce modular platform packages, a multiagent runtime, or measured model-quality claims.
+Verification recorded on 2026-10-01: all 34 tests and validation passed on Windows / Node 25.9.0; all three original test files and validation passed on Windows / Node 18.12.1. All 12 adapter outputs matched their source, and the lean Custom GPT output used 7,316 of its 8,000-character project budget. Independent review led to documentation and Node 18 test-hook corrections.
 
-## Acceptance checklist
+Those counts describe the first iteration; new modules and tests may change them. SQL, C#, and pg/argon2 login snippets remain illustrative. No live LLM evaluation was run in that iteration.
 
-Verified against the final combined change on 2026-10-01:
+## Second iteration: implementation and acceptance
 
-- [x] Tests and validation pass through `npm run check`.
-- [x] Regenerated adapters match the authored source.
-- [x] The Custom GPT adapter fits its 8,000-character project budget.
-- [x] Original adapter paths remain available and new installation paths are documented.
-- [x] Knowledge references and module registrations satisfy source contracts.
-- [x] The executable money example covers stated boundaries.
-- [x] Documentation and both READMEs agree with the delivered behavior.
-- [x] Evaluation scenarios are labeled as inputs/criteria, not observed responses.
-
-Manual model comparisons are a separate activity described in [evaluation.md](evaluation.md); passing repository checks does not complete that evaluation.
-
-## Verification evidence
-
-- Windows / Node 25.9.0: all 34 tests and validation passed.
-- Windows / Node 18.12.1: all three test files and validation passed using a temporary official runtime.
-- All 12 generated outputs match their sources; lean instructions use 7,316 of the 8,000-character project budget.
-- Independent review identified documentation overclaims and a Node 18 test-hook incompatibility; both were corrected and checked.
-- Authored documentation links and copyable module templates passed local checks.
-- SQL, C# and pg/argon2 login snippets remain illustrative; no live LLM evaluation was run.
-
-## Candidates for a later iteration
-
-| Candidate | Evidence to collect first |
+| Change | Required evidence |
 | --- | --- |
-| TypeScript and additional language/domain modules | Repeated user tasks that current modules do not support |
-| Platform reference packages loaded on demand | Context cost and installation results for the existing full adapters |
-| Recorded model comparisons | Comparable responses across the manual scenarios, with fixed tools and references |
+| Four modular skills with local references | Metadata, relative links, independent package contents, deterministic generation, and drift checks |
+| Project-local installer and removal | Preview without writes, refused conflicts, idempotence, preserved project guidance, unchanged receipt-based removal |
+| TypeScript reference module | Official sources, source/index validation, and generated output |
+| Three runnable demonstrations | Initial failure reproduced and maintainer solution checked for each fixture |
+| Shorter path to first use | English/PT READMEs, copyable commands, platform destinations, and honest evidence labels |
+| Downloadable installer archive | Local archive inspected/exercised; successful CI artifact rather than assumed registry publication |
 
-Prioritize changes based on those results. Add support only when its format and installation can be documented and checked.
+Local acceptance completed on 2026-10-01:
+
+- `npm run check` on Windows / Node 25.9.0: 69 tests passed, zero failures or skips, distribution validation passed, and all three demonstrations reproduced their initial failures and verified their solutions.
+- Node 18.12.1: all seven test files, distribution validation, and demos passed. This older test reporter aggregates results by file; its seven reported tests are not a count of the internal cases.
+- All twelve legacy adapters and four modular packages match their authored sources. All four entries passed the Agent Skills metadata validator.
+- The archive was packed, inspected, installed offline into a temporary npm consumer, and exercised through its registered command and extracted CLI: preview, installation, no-op repetition, and unchanged removal passed.
+- Separate reviewers approved installer/packaging runtime and docs/demos/recorded responses. Neither reviewer approved files they authored.
+- [Two recorded Codex review trials](evaluation-runs/2026-10-01/README.md) retain actual prompts and responses: a file-reading policy block and a supplied-text review. One task with different context is not a comparative benchmark.
+
+The pull request adds Linux/Windows × Node 18/22 checks and a downloadable archive artifact. Remote CI results belong in the pull request; local passing checks do not imply publication on npm or a released GitHub version.
+
+## Evaluation work remains separate
+
+The eight [manual scenarios](../examples/evaluation-cases.md) and the [capture template](evaluation.md#capture-a-real-run) support comparable trials. A measured improvement claim requires saved actual responses, model/platform details, fixed tools and references, repetitions where needed, and independent scoring.
+
+Prioritize future reference modules and host support from recurring user needs. Collect installation problems and reproducible assistant failures through the expanded issue template. Demonstrations and passing build checks do not guarantee more GitHub stars or performance across all models.

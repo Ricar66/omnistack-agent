@@ -4,82 +4,97 @@
 
 **[🇧🇷 Ler em Português](README.pt-BR.md)**
 
-## What is this
+**omnistack-agent** helps an AI assistant debug code, review changes, implement features, and explain engineering decisions with evidence. It provides short task skills and engineering references, generated from one source with no npm dependencies.
 
-**omnistack-agent** is an open-source collection of instructions and software-engineering references for AI assistants. A single source (`core/` + `knowledge/`) generates adapters for several platforms using a tested Node script with no npm dependencies.
+One assistant can use twelve engineering roles. Tools, permissions, model selection, and delegation come from your host platform.
 
-It gives one assistant twelve engineering roles. It does not run an independent multiagent system or grant tools, permissions, or access to your files.
+## Start with one task
 
-- **Software Architect** — boundaries, trade-offs, and architecture decisions.
-- **Full Stack Developer** — features across UI, APIs, and data.
-- **Mobile Developer** — native and cross-platform apps.
-- **Backend Engineer** — services, domain logic, and data integrity.
-- **Frontend Engineer** — accessible interfaces and predictable state.
-- **Database Administrator** — schemas, indexes, migrations, and tuning.
-- **DevOps Engineer** — CI/CD, infrastructure, deployments, and rollback.
-- **QA Engineer** — test strategy, regression checks, and bug reports.
-- **Security Engineer** — trust boundaries, threats, and secure defaults.
-- **Code Reviewer** — actionable findings supported by file and line evidence.
-- **Technical Writer** — READMEs, API references, and architecture guides.
-- **Software Mentor** — explanations with examples you can run.
+Use Node **≥ 18** for the installer and executable demonstrations. The generated files are already committed; you do not need a build or `npm install`.
 
-The instructions encourage proportional changes, evidence before conclusions, respect for existing project conventions, and explicit handling of missing tools or information. Object-oriented design is an available approach; choose abstractions that fit the problem.
+1. Clone the repository and choose your platform.
+2. Preview a skill installation into an **existing project**, then install it.
+3. Try a [copyable demonstration prompt](examples/showcase/README.md) in a disposable workspace.
+4. Run the checks and compare the result with the documented contract.
 
-## How to use
-
-The adapters are already generated and committed. You do not need Node or a build step to use them. Review the instructions and merge them with any existing project guidance before installation.
-
-| Platform | Adapter | Installation |
-| --- | --- | --- |
-| **ChatGPT** (Custom GPT, where available) | [custom-gpt-instructions.md](adapters/chatgpt/custom-gpt-instructions.md) | Paste the lean file into **Instructions**. Optionally upload [knowledge.md](adapters/reference/knowledge.md) as reference knowledge. |
-| **Claude Code** (project guidance) | [CLAUDE.md](adapters/claude/CLAUDE.md) | Merge the lean instructions into your project’s `CLAUDE.md`. |
-| **Claude Code** (subagent) | [agent.md](adapters/claude/agent.md) | Save in `.claude/agents/`. Its model setting inherits your session’s model. |
-| **Claude Code** (skill) | [SKILL.md](adapters/claude/SKILL.md) | Save as `.claude/skills/omnistack-agent/SKILL.md`; invoke `/omnistack-agent`. This variant includes the full knowledge. |
-| **GitHub Copilot** | [copilot-instructions.md](adapters/copilot/copilot-instructions.md) | Merge into `.github/copilot-instructions.md`. |
-| **Gemini** (Gem, where available) | [gem-instructions.md](adapters/gemini/gem-instructions.md) | Paste into **Instructions**. Optionally add [knowledge.md](adapters/reference/knowledge.md) under **Knowledge**. |
-| **Cursor** | [AGENTS.md](adapters/cursor/AGENTS.md) | Merge into your project’s root `AGENTS.md`. This variant includes the full knowledge. |
-| **Windsurf / Cascade** | [AGENTS.md](adapters/windsurf/AGENTS.md) | Merge the dedicated lean adapter into your project’s root `AGENTS.md`. |
-| **API / other LLMs** | [system-prompt.md](adapters/generic/system-prompt.md) | Use the instruction interface supported by your provider, within its context limits. This variant includes the full knowledge. |
-
-**Lean** includes core instructions and a module index. The index is a map, not the module contents: references are usable only when attached or accessible in your project. **Full** includes the complete knowledge inline and costs more context. The Custom GPT adapter has a project budget of **8,000 characters**, not a universal platform limit.
-
-See [the installation guide](docs/platforms.md) for existing-file safety, reference setup, Claude `AGENTS.md` compatibility, and the full API variants.
-
-## Examples and evaluation
-
-[Examples](examples/README.md) include an executable account example and [manual evaluation scenarios](examples/evaluation-cases.md) covering debugging, features, security, reviews, version checks, architecture, unavailable tools, and money boundaries.
-
-The scenarios are test inputs and expected evidence, not recorded AI responses or measured quality claims. Use the [evaluation guide](docs/evaluation.md) to compare prompts under the same model and tool setup. Automated checks validate repository contracts and executable examples; they do not establish the quality of model responses.
-
-## How to contribute
-
-> Edit `core/`, `knowledge/`, or the build scripts to change generated output. Never edit `adapters/` by hand.
-
-1. Change the source. Register new modules in `knowledge/_index.md`.
-2. Regenerate the adapters with `npm run build`.
-3. Run `npm run check` for tests and validation.
-4. Commit source and regenerated output together, then open a pull request.
-
-`npm run check` does **not** rebuild adapters, so it catches committed output that has drifted from the source. Node **≥ 18** is required for contributor commands; no npm installation is needed.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow and [adding knowledge](docs/adding-knowledge.md) for the module template.
-
-## Repository structure
-
-```text
-core/        # Authored identity, roles, workflow, style, and guardrails
-knowledge/   # Authored reference modules and their index
-adapters/    # Generated instructions and knowledge bundle
-scripts/     # Dependency-free build, validation, and tests
-examples/    # Executable example and manual evaluation scenarios
-docs/        # Installation, architecture, contribution, and evaluation guides
-assets/      # Banner and static media
+```bash
+git clone https://github.com/Ricar66/omnistack-agent.git
+cd omnistack-agent
+node scripts/install.mjs install --platform claude --project "/path/to/your-project" --skill omnistack-debug --dry-run
+node scripts/install.mjs install --platform claude --project "/path/to/your-project" --skill omnistack-debug
+npm run demo
 ```
 
-## Next improvements
+Replace the project path with an existing directory. Choose `claude`, `copilot`, `cursor`, or `codex` for `--platform`. In Claude Code, invoke `/omnistack-debug`; other hosts discover skills through their own controls. Check that the host actually loaded the skill.
 
-The [improvement plan](docs/improvement-plan.md) tracks the current changes and candidates for later work: TypeScript and more domain modules, platform reference packages, and recorded model evaluations. Changes should follow evidence from real use.
+| Skill | Use it for |
+| --- | --- |
+| [omnistack-agent](packages/skills/omnistack-agent/SKILL.md) | General engineering work across the twelve roles |
+| [omnistack-debug](packages/skills/omnistack-debug/SKILL.md) | Reproducing a bug, isolating its cause, and verifying a small fix |
+| [omnistack-code-review](packages/skills/omnistack-code-review/SKILL.md) | Actionable findings with severity, file/line evidence, and impact |
+| [omnistack-security-review](packages/skills/omnistack-security-review/SKILL.md) | Trust boundaries, realistic attack paths, and proportionate mitigations |
 
-## License
+Each package contains its own reference files; an index link does not have to rely on a separate clone. The installer previews destinations, refuses conflicts, and treats identical installations as a no-op. It does not replace your project guidance. See [the quickstart](docs/quickstart.md) and [installation guide](docs/platforms.md), including safe removal.
+
+## Three demonstrations you can repeat
+
+```text
+cart: initial check failed as expected; solution checks passed
+permissions: initial check failed as expected; solution checks passed
+tasks: initial check failed as expected; solution checks passed
+3 maintainer-authored demonstrations verified; no model responses evaluated.
+```
+
+This is the output of `npm run demo`: a money-total bug, an access-check bug, and a bounded task-filter feature. [Prompts, initial fixtures, solutions, and checks](examples/showcase/README.md) are available to inspect.
+
+The solutions are maintainer-authored. These checks verify the demonstrations, rather than measure model quality. The [evaluation guide](docs/evaluation.md) explains how to save and compare actual responses under the same model and tool setup.
+
+[Two recorded Codex review trials](docs/evaluation-runs/2026-10-01/README.md) show an observed response and a file-read policy limitation; they are not a comparative benchmark.
+
+## Other platform adapters
+
+You can use the existing Markdown adapters manually without Node. Review and merge them with existing project rules.
+
+| Platform | Adapter | Use |
+| --- | --- | --- |
+| ChatGPT Custom GPT | [custom-gpt-instructions.md](adapters/chatgpt/custom-gpt-instructions.md) | Paste into Instructions; optionally attach [knowledge.md](adapters/reference/knowledge.md) |
+| Claude Code project guidance | [CLAUDE.md](adapters/claude/CLAUDE.md) | Merge into your project `CLAUDE.md` |
+| Claude Code subagent | [agent.md](adapters/claude/agent.md) | Save in `.claude/agents/`; model inherits the session |
+| GitHub Copilot project guidance | [copilot-instructions.md](adapters/copilot/copilot-instructions.md) | Merge into `.github/copilot-instructions.md` |
+| Gemini Gem | [gem-instructions.md](adapters/gemini/gem-instructions.md) | Paste into Instructions; optionally attach the reference bundle |
+| Cursor project guidance | [AGENTS.md](adapters/cursor/AGENTS.md) | Merge into root `AGENTS.md`; full knowledge inline |
+| Windsurf / Cascade | [AGENTS.md](adapters/windsurf/AGENTS.md) | Merge into root `AGENTS.md`; lean |
+| API / other LLMs | [system-prompt.md](adapters/generic/system-prompt.md) | Use your provider's instruction interface and context limits |
+
+**Lean** adapters contain core instructions and a module map. They need accessible or attached references. **Full** adapters embed all knowledge and consume more context. The preserved [Claude single-file skill](adapters/claude/SKILL.md) remains available; the modular packages above load supporting files as needed. The Custom GPT adapter has an **8,000-character project budget**, rather than a universal platform limit.
+
+## Engineering coverage
+
+The references cover architecture, OOP, JavaScript, TypeScript, C#, SQL, frontend, backend, mobile, databases, DevOps, testing, security, and documentation. Instructions encourage proportional changes, project conventions, clear capability limits, and observed verification before completion claims. Choose abstractions that fit the task.
+
+The twelve roles are Architect, Full Stack Developer, Mobile Developer, Backend Engineer, Frontend Engineer, Database Administrator, DevOps Engineer, QA Engineer, Security Engineer, Code Reviewer, Technical Writer, and Software Mentor.
+
+## Contribute
+
+> Edit `core/`, `workflows/`, `knowledge/`, or scripts. Never edit `adapters/` or `packages/` by hand.
+
+```bash
+npm run build
+npm run check
+npm run demo
+```
+
+`npm run check` tests and validates committed output without rebuilding it, so drift is visible. See [CONTRIBUTING.md](CONTRIBUTING.md), [adding knowledge](docs/adding-knowledge.md), and the [improvement plan](docs/improvement-plan.md).
+
+```text
+core/        # Shared engineering instructions
+workflows/   # Focused task skill sources
+knowledge/   # Reference modules and canonical index
+adapters/    # Generated legacy platform instructions
+packages/    # Generated modular skills, references, and manifest
+scripts/     # Build, validation, installer, demonstrations, and tests
+examples/    # Runnable examples and evaluation scenarios
+docs/        # Quickstart, installation, architecture, and evaluation
+```
 
 Released under the **MIT License**. See [LICENSE](LICENSE).

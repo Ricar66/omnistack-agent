@@ -1,6 +1,6 @@
 # Adding a Knowledge Module
 
-Knowledge is authored in `knowledge/` and generated into adapters. Each module covers one topic, with concepts, examples, pitfalls, and sources.
+Knowledge is authored in `knowledge/` and generated into adapters and modular skill references. Each module covers one topic, with concepts, examples, pitfalls, and sources.
 
 ## 1. Choose a topic and sources
 
@@ -54,7 +54,7 @@ npm run build
 npm run check
 ```
 
-Full instruction adapters and the reference bundle include the module inline. Lean instruction adapters include its entry in the compact map, with a repository-oriented `knowledge/...` path. That map does not copy the module into the consumer's project or fetch it automatically.
+Full instruction adapters and the reference bundle include the module inline. Lean instruction adapters include its entry in the compact map, with a repository-oriented `knowledge/...` path. That map does not copy the module into the consumer's project or fetch it automatically. The general modular skill includes all registered modules as local references; focused skills include their configured subset from `scripts/packages.mjs`. Review the subset when a new module is relevant to a task.
 
 `npm run check` runs tests and validates the generated files without rebuilding. It catches source contract failures and stale committed output. It does not establish the correctness of every teaching claim or the quality of a model's response: review the references and run any relevant example tests separately.
 
@@ -62,4 +62,4 @@ Full instruction adapters and the reference bundle include the module inline. Le
 
 Review the module for a clear scope, source/version accuracy, executable examples, and useful pitfalls. For behavior changes, consider a scenario in [the evaluation cases](../examples/evaluation-cases.md).
 
-Commit the source module, its index entry, and generated adapters together. In the pull request, describe what the module teaches and which checks you ran. See [CONTRIBUTING.md](../CONTRIBUTING.md) for the full workflow.
+Commit the source module, its index entry, and generated adapters and packages together. In the pull request, describe what the module teaches and which checks you ran. See [CONTRIBUTING.md](../CONTRIBUTING.md) for the full workflow.

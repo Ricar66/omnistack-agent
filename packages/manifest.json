@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 1,
+  "version": "0.2.0",
+  "skills": [
+    {
+      "name": "omnistack-agent",
+      "path": "skills/omnistack-agent",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "eee610d6c69844a9d553cd0747a498c02f1ea3123a0a80970eaf9fb08ba657dd"
+        },
+        {
+          "path": "references/examples/bank-account.mjs",
+          "sha256": "89a9074aa97cdcfe829bcc65826d2ae068e225982a4c683d0e93bd844ebc88d6"
+        },
+        {
+          "path": "references/knowledge/architecture/patterns.md",
+          "sha256": "24e10918e792f1d1ac9c3ea7aa5682945008183fe47a0746c2bdd0e094c8fd9a"
+        },
+        {
+          "path": "references/knowledge/architecture/scalability.md",
+          "sha256": "b4f36b9d8469085e35256ab228413a1000f763b86abc744111d8e8d517bc0278"
+        },
+        {
+          "path": "references/knowledge/backend/apis.md",
+          "sha256": "8b3afc3aec9e2de64091286e26924c2a54fa02c64064fcd95d62afe6ce87e5d3"
+        },
+        {
+          "path": "references/knowledge/databases/modeling.md",
+          "sha256": "801a9c7cf5c34944b9cff71116f6ca563b820fe7c2170561b45fc0959aa515f3"
+        },
+        {
+          "path": "references/knowledge/databases/non-relational.md",
+          "sha256": "94ab5377e78769c6154068df0800f2a9f57ebbec7c00e8b5afe84eac716b7abe"
+        },
+        {
+          "path": "references/knowledge/databases/relational.md",
+          "sha256": "200a489cb7cb9dbd2246fc03ac38bbca2f5ed8e9e70cd19b0477bf65c3a21895"
+        },
+        {
+          "path": "references/knowledge/devops/ci-cd.md",
+          "sha256": "b09f196409ec41b8d8fb38c9d87e7749e06c63f31584f26a04b54a912e4410a9"
+        },
+        {
+          "path": "references/knowledge/documentation/technical-writing.md",
+          "sha256": "8b07200c6c943bd8ee7e30c40c60802ba165c3e2dca95feb4ee123de42a5d300"
+        },
+        {
+          "path": "references/knowledge/frontend/react.md",
+          "sha256": "33291157b7350a7303b57a45f4ce5ed4d814f8d9260987b4d322d6110b990bb2"
+        },
+        {
+          "path": "references/knowledge/languages/csharp.md",
+          "sha256": "c4e5575f53190e9334e5fe3c6abb5e6e824c063caf847c6deeaac8b590361049"
+        },
+        {
+          "path": "references/knowledge/languages/html-css.md",
+          "sha256": "cd1b4729ab4be5bd9bc73fd30a5f95b48d18111a79983bba8d0e423d6d6e48fb"
+        },
+        {
+          "path": "references/knowledge/languages/javascript.md",
+          "sha256": "3b43502075cd98692c5ad99c25bf69b906b74d0dab26868317637f8d71e4f447"
+        },
+        {
+          "path": "references/knowledge/languages/typescript.md",
+          "sha256": "79629509b1172617a657e65c9d4df80a4352b4de0b45b9a7186d5dd90af4dc19"
+        },
+        {
+          "path": "references/knowledge/mobile/cross-platform.md",
+          "sha256": "2bfb3637024143ac012fbf37374afc26a978f90189dbc63ee9b0f3de44bf708a"
+        },
+        {
+          "path": "references/knowledge/oop/classes-objects-attributes.md",
+          "sha256": "9b066f392c21b70907aaa3688cc716a34a9ae5d0e300e3f1aba0f0fc7c495a9f"
+        },
+        {
+          "path": "references/knowledge/oop/design-patterns.md",
+          "sha256": "b2954a2ede8f9b14551345010fecec73abed87589f6d868faee3db00f5931ca9"
+        },
+        {
+          "path": "references/knowledge/oop/pillars.md",
+          "sha256": "82bd1653b9029f21321f21931b38b32805e2c74bd6c02fb5c6fe69ce9be453a4"
+        },
+        {
+          "path": "references/knowledge/oop/solid.md",
+          "sha256": "a0febdb58d8cc187e4a1914581a5e0923e78e370fb818335d34ab5930d674a37"
+        },
+        {
+          "path": "references/knowledge/security/best-practices.md",
+          "sha256": "6c0a9e52885ac80b02fd4bda74f3874838390b38188ea6a13a7a8dc21b6e5b83"
+        },
+        {
+          "path": "references/knowledge/testing/automated.md",
+          "sha256": "4a5f9eb097ea5bf2b76154b5d6c1d508bb212c9ae1d81a54f3865982c68cf752"
+        },
+        {
+          "path": "references/knowledge/testing/manual-qa.md",
+          "sha256": "4f377b4e2e911ca83ce333b203834993f4188d3720ba6191640d42c48db38a57"
+        },
+        {
+          "path": "references/scripts/bank-account-checks.mjs",
+          "sha256": "46082df70c4e579b73efecb0552299f6520c9137c6c31ab768f1ee4f79d9eb1b"
+        }
+      ]
+    },
+    {
+      "name": "omnistack-code-review",
+      "path": "skills/omnistack-code-review",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "1c50822f17d2f07576bfd4272ff2eaa56c2adece849432b628f9525d0ab39f09"
+        },
+        {
+          "path": "references/core.md",
+          "sha256": "b9575b1f6001945736db2afd963c0fbe9f1e8dbf832192c953d6d0cacd8400a2"
+        },
+        {
+          "path": "references/examples/bank-account.mjs",
+          "sha256": "89a9074aa97cdcfe829bcc65826d2ae068e225982a4c683d0e93bd844ebc88d6"
+        },
+        {
+          "path": "references/knowledge/backend/apis.md",
+          "sha256": "8b3afc3aec9e2de64091286e26924c2a54fa02c64064fcd95d62afe6ce87e5d3"
+        },
+        {
+          "path": "references/knowledge/languages/javascript.md",
+          "sha256": "3b43502075cd98692c5ad99c25bf69b906b74d0dab26868317637f8d71e4f447"
+        },
+        {
+          "path": "references/knowledge/languages/typescript.md",
+          "sha256": "79629509b1172617a657e65c9d4df80a4352b4de0b45b9a7186d5dd90af4dc19"
+        },
+        {
+          "path": "references/knowledge/oop/solid.md",
+          "sha256": "a0febdb58d8cc187e4a1914581a5e0923e78e370fb818335d34ab5930d674a37"
+        },
+        {
+          "path": "references/knowledge/security/best-practices.md",
+          "sha256": "6c0a9e52885ac80b02fd4bda74f3874838390b38188ea6a13a7a8dc21b6e5b83"
+        },
+        {
+          "path": "references/knowledge/testing/automated.md",
+          "sha256": "4a5f9eb097ea5bf2b76154b5d6c1d508bb212c9ae1d81a54f3865982c68cf752"
+        },
+        {
+          "path": "references/scripts/bank-account-checks.mjs",
+          "sha256": "46082df70c4e579b73efecb0552299f6520c9137c6c31ab768f1ee4f79d9eb1b"
+        }
+      ]
+    },
+    {
+      "name": "omnistack-debug",
+      "path": "skills/omnistack-debug",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "3938f6da157cf402e8406d53cfb496a992b75890fc71298bd85eb19af1a510a6"
+        },
+        {
+          "path": "references/core.md",
+          "sha256": "b9575b1f6001945736db2afd963c0fbe9f1e8dbf832192c953d6d0cacd8400a2"
+        },
+        {
+          "path": "references/examples/bank-account.mjs",
+          "sha256": "89a9074aa97cdcfe829bcc65826d2ae068e225982a4c683d0e93bd844ebc88d6"
+        },
+        {
+          "path": "references/knowledge/backend/apis.md",
+          "sha256": "8b3afc3aec9e2de64091286e26924c2a54fa02c64064fcd95d62afe6ce87e5d3"
+        },
+        {
+          "path": "references/knowledge/databases/relational.md",
+          "sha256": "200a489cb7cb9dbd2246fc03ac38bbca2f5ed8e9e70cd19b0477bf65c3a21895"
+        },
+        {
+          "path": "references/knowledge/devops/ci-cd.md",
+          "sha256": "b09f196409ec41b8d8fb38c9d87e7749e06c63f31584f26a04b54a912e4410a9"
+        },
+        {
+          "path": "references/knowledge/languages/javascript.md",
+          "sha256": "3b43502075cd98692c5ad99c25bf69b906b74d0dab26868317637f8d71e4f447"
+        },
+        {
+          "path": "references/knowledge/languages/typescript.md",
+          "sha256": "79629509b1172617a657e65c9d4df80a4352b4de0b45b9a7186d5dd90af4dc19"
+        },
+        {
+          "path": "references/knowledge/testing/automated.md",
+          "sha256": "4a5f9eb097ea5bf2b76154b5d6c1d508bb212c9ae1d81a54f3865982c68cf752"
+        },
+        {
+          "path": "references/scripts/bank-account-checks.mjs",
+          "sha256": "46082df70c4e579b73efecb0552299f6520c9137c6c31ab768f1ee4f79d9eb1b"
+        }
+      ]
+    },
+    {
+      "name": "omnistack-security-review",
+      "path": "skills/omnistack-security-review",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "06bab63e476951dc2a6dd49b003ea9b55464f285643ca04c92489f00c1373cb5"
+        },
+        {
+          "path": "references/core.md",
+          "sha256": "b9575b1f6001945736db2afd963c0fbe9f1e8dbf832192c953d6d0cacd8400a2"
+        },
+        {
+          "path": "references/examples/bank-account.mjs",
+          "sha256": "89a9074aa97cdcfe829bcc65826d2ae068e225982a4c683d0e93bd844ebc88d6"
+        },
+        {
+          "path": "references/knowledge/backend/apis.md",
+          "sha256": "8b3afc3aec9e2de64091286e26924c2a54fa02c64064fcd95d62afe6ce87e5d3"
+        },
+        {
+          "path": "references/knowledge/databases/relational.md",
+          "sha256": "200a489cb7cb9dbd2246fc03ac38bbca2f5ed8e9e70cd19b0477bf65c3a21895"
+        },
+        {
+          "path": "references/knowledge/devops/ci-cd.md",
+          "sha256": "b09f196409ec41b8d8fb38c9d87e7749e06c63f31584f26a04b54a912e4410a9"
+        },
+        {
+          "path": "references/knowledge/security/best-practices.md",
+          "sha256": "6c0a9e52885ac80b02fd4bda74f3874838390b38188ea6a13a7a8dc21b6e5b83"
+        },
+        {
+          "path": "references/knowledge/testing/automated.md",
+          "sha256": "4a5f9eb097ea5bf2b76154b5d6c1d508bb212c9ae1d81a54f3865982c68cf752"
+        },
+        {
+          "path": "references/scripts/bank-account-checks.mjs",
+          "sha256": "46082df70c4e579b73efecb0552299f6520c9137c6c31ab768f1ee4f79d9eb1b"
+        }
+      ]
+    }
+  ]
+}

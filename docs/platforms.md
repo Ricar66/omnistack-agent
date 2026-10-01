@@ -1,10 +1,45 @@
 # Platform Install Guide
 
-The adapters are generated and committed. Installation does not require Node or a build. Choose an instruction file for your platform and review it before use.
+Generated modular skills and legacy adapters are committed. Use the project-local installer for Claude Code, GitHub Copilot, Cursor, or Codex; it requires Node ≥ 18. Manual Markdown adapter installation does not require Node or a build.
+
+## Modular skills: preview and install
+
+See [the quickstart](quickstart.md) for a complete first task. The four available skills are `omnistack-agent`, `omnistack-debug`, `omnistack-code-review`, and `omnistack-security-review`. Each package includes a short entry and its reference files.
+
+| Platform flag | Project-local skill directory | Format documentation |
+| --- | --- | --- |
+| `claude` | `.claude/skills/` | [Claude Code skills](https://code.claude.com/docs/en/skills) |
+| `copilot` | `.github/skills/` | [Copilot agent skills](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/add-skills) |
+| `cursor` | `.cursor/skills/` | [Cursor skills](https://cursor.com/docs/skills) |
+| `codex` | `.agents/skills/` | [Codex skills](https://developers.openai.com/codex/skills) |
+
+From this repository, replace the project path with an existing directory:
+
+```bash
+node scripts/install.mjs install --platform claude --project "/path/to/your-project" --skill omnistack-debug --dry-run
+node scripts/install.mjs install --platform claude --project "/path/to/your-project" --skill omnistack-debug
+```
+
+Omit `--skill` or pass `--skill all` to install all four. The installer validates the packaged files and prints each destination. A dry run writes nothing; identical installed files with their matching receipt are a no-op. Conflicts stop the selected operation. There is no global install or force-overwrite option.
+
+Restart or reload the host as its client requires, then inspect its skills/context controls. In Claude Code, use `/omnistack-debug` to explicitly invoke that installed skill. Metadata and references support discovery; they do not guarantee activation or reference retrieval.
+
+To remove an unchanged installed skill:
+
+```bash
+node scripts/install.mjs uninstall --platform claude --project "/path/to/your-project" --skill omnistack-debug --dry-run
+node scripts/install.mjs uninstall --platform claude --project "/path/to/your-project" --skill omnistack-debug
+```
+
+Keep the installation receipt. Removal refuses modified or unmanaged content; resolve customized files manually. The installer does not merge or overwrite `CLAUDE.md`, `AGENTS.md`, or `copilot-instructions.md`.
+
+You can also copy a complete folder from `packages/skills/` into the platform's skill directory. Include its `references/`, rather than only `SKILL.md`. A manual copy has no installer receipt, so the installer will treat it as unmanaged content.
+
+The following sections cover the preserved manual adapters.
 
 ## Preserve existing guidance
 
-If your project already has `CLAUDE.md`, `AGENTS.md`, a skill with the same name, or Copilot instructions, back it up and merge the relevant instructions. Keep local build commands, conventions, permissions, and security requirements. Resolve conflicts before starting a new session. Copying an adapter over an existing file can discard those project rules.
+For manual adapters, if your project already has `CLAUDE.md`, `AGENTS.md`, a skill with the same name, or Copilot instructions, back it up and merge the relevant instructions. Keep local build commands, conventions, permissions, and security requirements. Resolve conflicts before starting a new session. Copying an adapter over an existing file can discard those project rules.
 
 The adapter supplies instructions; the host supplies tools and permissions. An instruction to run a command or consult a file does not make that capability available.
 
@@ -12,7 +47,7 @@ The adapter supplies instructions; the host supplies tools and permissions. An i
 
 **Lean** contains core instructions and a compact module map. The paths in the map refer to the source repository; they are usable only if you attach reference content or provide filesystem access to the modules. Copying the instruction text alone does not load the knowledge.
 
-**Full** includes the complete knowledge in one file and consumes more context. Claude skill/subagent, the legacy Claude `AGENTS.md`, Cursor, and API full variants remain available. They do not use separate reference files that load on demand.
+**Full** includes the complete knowledge in one file and consumes more context. Claude skill/subagent, the legacy Claude `AGENTS.md`, Cursor, and API full variants remain available. These legacy full files do not use separate reference files; the modular skills above do.
 
 **Reference** is [adapters/reference/knowledge.md](../adapters/reference/knowledge.md): knowledge without the core persona. Upload it where your platform supports knowledge files, or copy it into an accessible project directory and identify its local path in your guidance. Ask the assistant to consult relevant sections when needed. Do not add a startup import of the entire bundle if your aim is to keep startup context small.
 
@@ -47,13 +82,13 @@ When sharing an existing `AGENTS.md`, add this to a `CLAUDE.md` beside it, prese
 
 This import loads the referenced content too, so importing the full adapter still costs its full context. Check [Claude's memory documentation](https://code.claude.com/docs/en/memory) for your version's discovery settings.
 
-## Claude Code (skill or subagent)
+## Claude Code (legacy single-file skill or subagent)
 
 ### Skill
 
 Copy [SKILL.md](../adapters/claude/SKILL.md) to `.claude/skills/omnistack-agent/SKILL.md`, then invoke `/omnistack-agent`. It includes YAML metadata and full knowledge. This is a Claude Code installation, rather than a claim that the same frontmatter can be uploaded to every Claude surface.
 
-Claude recommends short skills with separate supporting files; this adapter remains a full single file. Consider the lean project guidance when you want a smaller payload. [Official skills guide](https://code.claude.com/docs/en/skills)
+Prefer the modular skills above for short task entries with their own supporting files. This preserved adapter remains a full single file. [Official skills guide](https://code.claude.com/docs/en/skills)
 
 ### Subagent
 

@@ -41,6 +41,7 @@ The agent's specialization; use classes and objects when they fit the domain and
 Language-specific essentials; preserve each language's idioms.
 - [C# Essentials](languages/csharp.md) — types, records, async/await, LINQ, null-safety.
 - [JavaScript Essentials](languages/javascript.md) — modern JS, modules, async, and the footguns.
+- [TypeScript Essentials](languages/typescript.md) — narrowing, boundary validation, strict configuration and domain states.
 - [HTML & CSS Essentials](languages/html-css.md) — semantic HTML, the box model, Flexbox & Grid, a11y.
 
 ### Frontend

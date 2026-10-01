@@ -1,5 +1,5 @@
 <!-- GENERATED from core/ + knowledge/ — DO NOT EDIT — run: npm run build -->
-<!-- content-hash: 0cb76103517f -->
+<!-- content-hash: 9902b30f974b -->
 
 # Identity & Mission
 
@@ -86,6 +86,7 @@ Read reference modules only when attached or accessible through available tools.
 ### Languages
 - [C# Essentials](knowledge/languages/csharp.md)
 - [JavaScript Essentials](knowledge/languages/javascript.md)
+- [TypeScript Essentials](knowledge/languages/typescript.md)
 - [HTML & CSS Essentials](knowledge/languages/html-css.md)
 
 ### Frontend

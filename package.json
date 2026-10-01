@@ -1,18 +1,46 @@
 {
   "name": "omnistack-agent",
-  "version": "0.1.0",
-  "description": "AI-platform-agnostic, open-source Full Stack Software Engineering Specialist agent.",
+  "version": "0.2.0",
+  "description": "Portable software-engineering skills and prompts for coding assistants, with a safe local installer.",
   "type": "module",
   "license": "MIT",
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "validate": "node scripts/validate.mjs",
     "test": "node --test",
-    "check": "npm test && npm run validate"
+    "check": "npm test && npm run validate && npm run demo",
+    "demo": "node scripts/demos.mjs"
   },
   "keywords": [
-    "ai-agent", "fullstack", "system-prompt", "prompt-engineering",
-    "oop", "software-engineering", "platform-agnostic", "open-source"
-  ]
+    "ai-agent",
+    "fullstack",
+    "system-prompt",
+    "prompt-engineering",
+    "oop",
+    "software-engineering",
+    "platform-agnostic",
+    "open-source"
+  ],
+  "bin": {
+    "omnistack-agent": "scripts/install.mjs"
+  },
+  "files": [
+    "packages/",
+    "scripts/install.mjs",
+    "scripts/installer-lib.mjs",
+    "LICENSE",
+    "README.md",
+    "README.pt-BR.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ricar66/omnistack-agent.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ricar66/omnistack-agent/issues"
+  },
+  "homepage": "https://github.com/Ricar66/omnistack-agent#readme"
 }

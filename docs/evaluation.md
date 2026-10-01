@@ -1,6 +1,6 @@
 # Evaluating Agent Responses
 
-Repository checks validate generated files and executable examples. They do not run an LLM or prove that the agent produces better software-engineering answers. This guide describes a separate, manual comparison of the instructions.
+Repository checks validate generated files, installation behavior, and executable examples. They do not run an LLM or prove that the agent produces better software-engineering answers. This guide describes a separate, manual comparison of the instructions.
 
 ## Select the comparison
 
@@ -56,3 +56,44 @@ Report the setup, cases, number of runs, observed failures, and limitations alon
 Use wording such as “under this model and tool setup, the candidate handled these cases better” when the evidence supports it. Do not claim improvement across all platforms or models from a few manual runs.
 
 When a case exposes a recurring weakness, change the relevant core instruction or knowledge module, regenerate adapters, and rerun comparable cases. Keep scenarios and criteria stable unless the evaluation itself needs correction.
+
+## Demonstration evidence versus response evidence
+
+The [showcase](../examples/showcase/README.md) records executable before/after fixtures and maintainer-authored solutions. `npm run demo` verifies those examples without sending a request to an LLM. A passing solution snapshot is not evidence that an assistant generated or correctly applied the same solution.
+
+When trying a showcase prompt, keep the solution out of the assistant's context, evaluate its actual changed file, and retain any failures. The committed demo runner always checks its own snapshots; it does not follow edits in another workspace.
+
+## Capture a real run
+
+Copy this template for every baseline/candidate run. Leave unavailable fields explicit; do not substitute expected answers.
+
+```markdown
+# Evaluation run
+- Case ID:
+- Run ID / repetition:
+- Date:
+- Variant and repository commit:
+- Platform/client version:
+- Model/version:
+- Sampling settings, if configurable:
+- Skill or adapter path and payload mode:
+- Reference files actually supplied:
+- Available tools and permissions:
+- Workspace / fixture version:
+- Exact prompt: [saved prompt]
+- Actual response: [saved response]
+- Applied patch or resulting files: [saved diff]
+- Executed commands and actual output: [saved log]
+- Human follow-up, if any:
+- Correctness /2:
+- Scope and design /2:
+- Evidence and honesty /2:
+- Trust and tool boundaries /2:
+- Communication and references /2:
+- Critical failure: yes/no, with evidence
+- Reviewer and notes:
+```
+
+Store sanitized prompts, responses, and logs together with the record. Remove secrets and private data while retaining enough safe input to reproduce the behavior. Record redactions and setup differences that may affect interpretation.
+
+This guide and the scenario files do not publish model scores. Any future evaluation report must identify its actual saved runs, reviewers, and limits.

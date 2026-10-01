@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Four modular skills with bundled references: general engineering, debugging,
+  code review, and security review.
+- Project-local install/uninstall CLI with dry-run preview, integrity checks,
+  conflict refusal, and receipt-based handling of unchanged installations.
+- TypeScript reference coverage and source-derived modular package manifest.
+- Three executable before/after demonstrations and a prompt-driven quickstart.
+- Expanded behavior bug reports and a template for capturing actual model runs.
+- CI installer archive artifact generated after successful checks.
+
 - Security Engineer and Code Reviewer roles within the existing single-agent prompt.
 - Lean Claude `CLAUDE.md` and dedicated Windsurf `AGENTS.md` adapters, plus a
   generated knowledge-only bundle for attached references.

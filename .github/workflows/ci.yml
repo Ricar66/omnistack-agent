@@ -20,5 +20,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-      - name: Test sources and validate generated adapters
+      - name: Test sources, generated distribution, and demos
         run: npm run check
+      - name: Pack portable installer
+        if: matrix.os == 'ubuntu-latest' && matrix.node == 22
+        run: npm pack --ignore-scripts
+      - name: Save reviewable installer artifact
+        if: matrix.os == 'ubuntu-latest' && matrix.node == 22
+        uses: actions/upload-artifact@v4
+        with:
+          name: omnistack-agent-installer
+          path: omnistack-agent-*.tgz
+          if-no-files-found: error
+          retention-days: 14
