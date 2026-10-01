@@ -6,13 +6,14 @@ The knowledge base is a set of small, self-contained Markdown modules, one topic
 into folders by domain (OOP, Languages, Frontend, Backend, Mobile, Databases, Architecture, DevOps,
 Testing, Security, Documentation). Every module follows the same fixed template so any topic reads
 the same way — concepts first, then best practices, real commented examples, the traps to avoid, and
-authoritative references — and closes with a difficulty level. The build script assembles these
-modules (plus this index) into the per-platform adapters, so this hub is the single table of contents
-contributors and readers both rely on. To add knowledge, copy the template below into the right
+authoritative references — and closes with a difficulty level. The build derives compact navigation
+for lean adapters and embeds this index plus all modules in full adapters. This hub is the single
+table of contents contributors and readers both rely on. To add knowledge, copy the template into the right
 folder, write the module, and link it under its category here.
 
 ## Module template
-Every knowledge module MUST follow this shape:
+Every knowledge module MUST follow this shape, in this order. Use real, commented examples,
+authoritative references, and exactly one level: `beginner`, `intermediate`, or `advanced`.
 
 ```markdown
 # <Topic>
@@ -20,24 +21,24 @@ Every knowledge module MUST follow this shape:
 
 ## Concepts
 ## Best Practices
-## Patterns & Examples   (real, commented code)
+## Patterns & Examples
 ## Common Pitfalls / Anti-patterns
-## References            (official docs / standards)
+## References
 
-<!-- level: beginner | intermediate | advanced -->
+<!-- level: beginner -->
 ```
 
 ## Modules by category
 
 ### OOP
-The primary focus of this agent — object-oriented design done well.
+The agent's specialization; use classes and objects when they fit the domain and language.
 - [Classes, Objects & Attributes](oop/classes-objects-attributes.md) — the atoms of OOP; read this first.
 - [The Four Pillars of OOP](oop/pillars.md) — encapsulation, abstraction, inheritance, polymorphism.
 - [SOLID Principles](oop/solid.md) — five principles for changeable object-oriented code.
 - [Design Patterns](oop/design-patterns.md) — a catalog of reusable solutions (GoF and beyond).
 
 ### Languages
-Language-specific essentials, OOP-first.
+Language-specific essentials; preserve each language's idioms.
 - [C# Essentials](languages/csharp.md) — types, records, async/await, LINQ, null-safety.
 - [JavaScript Essentials](languages/javascript.md) — modern JS, modules, async, and the footguns.
 - [HTML & CSS Essentials](languages/html-css.md) — semantic HTML, the box model, Flexbox & Grid, a11y.

@@ -1,70 +1,101 @@
 # Platform Install Guide
 
-omnistack-agent ships pre-generated adapter files for every supported platform. You never run a build to *use* the agent — just copy the listed file's contents and paste it where the platform expects its instructions. This guide gives a short, concrete walkthrough for each of the six platforms.
+The adapters are generated and committed. Installation does not require Node or a build. Choose an instruction file for your platform and review it before use.
 
-> Adapters come in two depths. **Full** adapters carry the complete knowledge base inline; **lean** adapters carry the agent's brain plus the knowledge index (the agent still reasons from its full identity and principles, with the index as a map). Pick the variant that fits your platform's instruction-size limits.
+## Preserve existing guidance
 
----
+If your project already has `CLAUDE.md`, `AGENTS.md`, a skill with the same name, or Copilot instructions, back it up and merge the relevant instructions. Keep local build commands, conventions, permissions, and security requirements. Resolve conflicts before starting a new session. Copying an adapter over an existing file can discard those project rules.
 
-## ChatGPT (Custom GPT)
+The adapter supplies instructions; the host supplies tools and permissions. An instruction to run a command or consult a file does not make that capability available.
 
-File: [`adapters/chatgpt/custom-gpt-instructions.md`](../adapters/chatgpt/custom-gpt-instructions.md) (lean) or [`adapters/chatgpt/system-prompt.md`](../adapters/chatgpt/system-prompt.md) (full)
+## Choose a payload
 
-1. In ChatGPT, go to **Explore GPTs → Create** (requires a paid plan).
-2. Open the **Configure** tab.
-3. Copy the entire contents of `custom-gpt-instructions.md` and paste it into the **Instructions** box.
-4. Give the GPT a name and avatar, then **Save / Update** and choose your visibility.
-5. If you want the full knowledge base inline instead, use `system-prompt.md` in the same field.
+**Lean** contains core instructions and a compact module map. The paths in the map refer to the source repository; they are usable only if you attach reference content or provide filesystem access to the modules. Copying the instruction text alone does not load the knowledge.
 
-## Claude (Skill)
+**Full** includes the complete knowledge in one file and consumes more context. Claude skill/subagent, the legacy Claude `AGENTS.md`, Cursor, and API full variants remain available. They do not use separate reference files that load on demand.
 
-File: [`adapters/claude/SKILL.md`](../adapters/claude/SKILL.md) (full)
+**Reference** is [adapters/reference/knowledge.md](../adapters/reference/knowledge.md): knowledge without the core persona. Upload it where your platform supports knowledge files, or copy it into an accessible project directory and identify its local path in your guidance. Ask the assistant to consult relevant sections when needed. Do not add a startup import of the entire bundle if your aim is to keep startup context small.
 
-1. Create the folder `.claude/skills/omnistack-agent/` in your project (or your user-level Claude config).
-2. Copy `SKILL.md` into it as `SKILL.md` — it already includes the required YAML frontmatter (`name`, `description`, `user-invocable: true`).
-3. Restart or reload Claude Code so it discovers the skill.
-4. Invoke it by name when you want the omnistack-agent persona.
+## ChatGPT (Custom GPT, where available)
 
-## Claude (Agent)
+Use [custom-gpt-instructions.md](../adapters/chatgpt/custom-gpt-instructions.md) for the **Instructions** field.
 
-File: [`adapters/claude/agent.md`](../adapters/claude/agent.md) (full); repo-wide alternative: [`adapters/claude/AGENTS.md`](../adapters/claude/AGENTS.md)
+1. Open the GPT creation/configuration interface offered by your account.
+2. Paste the lean instructions, name the GPT, and save according to your account's sharing controls.
+3. If a Knowledge upload is available, attach [knowledge.md](../adapters/reference/knowledge.md).
+4. Preview a task and check whether the GPT can use the attached knowledge. If no reference is attached, the index remains a topic map.
 
-1. Create the folder `.claude/agents/` in your project if it doesn't exist.
-2. Copy `agent.md` into it — the frontmatter already sets the agent `name`, `description`, and `model`.
-3. Reload Claude Code; the subagent becomes available for delegation.
-4. Alternatively, drop `AGENTS.md` at your repository root to apply the guidance repo-wide instead of as a named subagent.
+The adapter is limited to **8,000 characters by this project**, not by a documented universal platform limit. Keep [system-prompt.md](../adapters/chatgpt/system-prompt.md), the full variant, for an API or other interface with sufficient context capacity; do not paste it into the Custom GPT Instructions field.
+
+Available customization interfaces depend on the account and workspace. OpenAI's [customization guide](https://learn.chatgpt.com/docs/build-plugins) covers reusable instructions and reference material in plugins, and its [GPT migration guide](https://learn.chatgpt.com/docs/migrate-custom-gpts) covers Enterprise migration. This repository does not generate a ChatGPT plugin package.
+
+## Claude Code (project guidance)
+
+Recommended: [adapters/claude/CLAUDE.md](../adapters/claude/CLAUDE.md), the lean variant.
+
+1. Merge it into `CLAUDE.md` at your repository root, or into your existing project `.claude/CLAUDE.md`.
+2. If you want the knowledge, provide the reference bundle or source modules in the project and state their path.
+3. Start a new session and use `/memory` or `/context` to inspect the loaded guidance.
+
+The preserved [adapters/claude/AGENTS.md](../adapters/claude/AGENTS.md) includes full knowledge. Current Claude Code can load `AGENTS.md` directly, but default discovery is conditional: a project or ancestor `CLAUDE.md`, `.claude/CLAUDE.md`, or `CLAUDE.local.md` can take precedence. Older clients may require a `CLAUDE.md` import.
+
+When sharing an existing `AGENTS.md`, add this to a `CLAUDE.md` beside it, preserving other Claude instructions:
+
+```markdown
+@AGENTS.md
+```
+
+This import loads the referenced content too, so importing the full adapter still costs its full context. Check [Claude's memory documentation](https://code.claude.com/docs/en/memory) for your version's discovery settings.
+
+## Claude Code (skill or subagent)
+
+### Skill
+
+Copy [SKILL.md](../adapters/claude/SKILL.md) to `.claude/skills/omnistack-agent/SKILL.md`, then invoke `/omnistack-agent`. It includes YAML metadata and full knowledge. This is a Claude Code installation, rather than a claim that the same frontmatter can be uploaded to every Claude surface.
+
+Claude recommends short skills with separate supporting files; this adapter remains a full single file. Consider the lean project guidance when you want a smaller payload. [Official skills guide](https://code.claude.com/docs/en/skills)
+
+### Subagent
+
+Copy [agent.md](../adapters/claude/agent.md) into `.claude/agents/`, then restart the session or reload agents through the host's agent controls. Its frontmatter sets the name and description, and `model: inherit` uses the session's model. It includes full knowledge.
+
+A subagent runs only through Claude Code's delegation features; the adapter does not create an orchestration runtime. [Official subagent guide](https://code.claude.com/docs/en/sub-agents)
 
 ## GitHub Copilot
 
-File: [`adapters/copilot/copilot-instructions.md`](../adapters/copilot/copilot-instructions.md) (lean)
+Merge [copilot-instructions.md](../adapters/copilot/copilot-instructions.md) into `.github/copilot-instructions.md` at your repository root, then commit it.
 
-1. At your repository root, create the folder `.github/` if it doesn't exist.
-2. Save the file as `.github/copilot-instructions.md`.
-3. Commit it so the whole team shares the same instructions.
-4. Reload your editor (or restart the Copilot extension) to pick up the file.
+Copilot supports repository-wide instructions at that path. In Copilot Chat, inspect response references to confirm the instructions were used; available instruction types vary by environment. If using Copilot CLI, start a new session to pick up edited instructions. [Repository instructions](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions), [CLI instructions](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-custom-instructions)
 
-## Gemini (Gem)
+The adapter is lean. Provide accessible reference files and their project path if you need the knowledge beyond the topic map.
 
-File: [`adapters/gemini/gem-instructions.md`](../adapters/gemini/gem-instructions.md) (lean)
+## Gemini (Gem, where available)
 
-1. Open Gemini and go to **Gems → New Gem**.
-2. Copy the contents of `gem-instructions.md` into the **Instructions** field.
-3. Name the Gem (e.g. "omnistack-agent") and **Save**.
-4. Select the Gem from your list whenever you want the specialist persona.
+1. Open Gemini's Gem editor and create a Gem.
+2. Paste [gem-instructions.md](../adapters/gemini/gem-instructions.md) into **Instructions**.
+3. Under **Knowledge**, add [knowledge.md](../adapters/reference/knowledge.md) if you want the complete references.
+4. Name the Gem, save it, and preview a task using the knowledge.
 
-## Cursor / Windsurf
+Google documents Gem knowledge uploads separately from instructions. Uploading from your device avoids assuming that the Gem can read this repository or a local folder. [Official Gem guide](https://support.google.com/gemini/answer/15235603?hl=en)
 
-File: [`adapters/cursor/AGENTS.md`](../adapters/cursor/AGENTS.md) (full)
+This adapter targets Gems; it is not a Gemini CLI `GEMINI.md` file or a generated Gemini skill package.
 
-1. Copy the file to your project root as `AGENTS.md`.
-2. Cursor and Windsurf read `AGENTS.md` automatically — no extra configuration is needed.
-3. Commit it so the guidance travels with the repository.
-4. Reload the editor if it was already open.
+## Cursor
 
-## Generic (any LLM)
+Merge [adapters/cursor/AGENTS.md](../adapters/cursor/AGENTS.md) into `AGENTS.md` at the project root and commit it.
 
-File: [`adapters/generic/system-prompt.md`](../adapters/generic/system-prompt.md) (full)
+Cursor supports plain Markdown `AGENTS.md` guidance in the root and subdirectories. The preserved adapter is full. If you want scoped project rules, follow Cursor's native rule format; this repository does not generate `.mdc` rules. Rules apply to supported Agent features, rather than every editor completion. [Official rules guide](https://cursor.com/docs/rules)
 
-1. Copy the entire file contents.
-2. Paste it as the **system prompt** of your chat session, or as the `system` message in an API request (OpenAI, Anthropic, Mistral, a local model, etc.).
-3. Start your conversation — the agent now operates as the Full Stack Software Engineering Specialist.
+## Windsurf / Cascade
+
+Merge the dedicated lean [adapters/windsurf/AGENTS.md](../adapters/windsurf/AGENTS.md) into `AGENTS.md` at your project root and commit it.
+
+Cascade processes root `AGENTS.md` guidance as always active, and subdirectory files apply to their directory scope. Add accessible references and their path if you need the complete knowledge. The older shared Cursor file remains usable as a larger full payload, but the dedicated adapter is the lean option. [Official Cascade documentation](https://docs.devin.ai/desktop/cascade/memories)
+
+## APIs and other LLMs
+
+Use [adapters/generic/system-prompt.md](../adapters/generic/system-prompt.md) or [adapters/chatgpt/system-prompt.md](../adapters/chatgpt/system-prompt.md) when you want full knowledge inline.
+
+Pass the content through the provider's supported instruction interface and allow for the model's context limits, conversation history, and tool output. APIs differ in how system/developer instructions are represented; the filename does not prescribe a request schema.
+
+For a smaller payload, use a lean adapter and supply references through a supported file or retrieval mechanism. Check that the assistant can actually retrieve them before expecting module-based answers.
