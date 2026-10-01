@@ -19,7 +19,7 @@
 ## Patterns & Examples
 
 ```csharp
-// C#: an attribute kept consistent by behavior, not exposed as a raw setter.
+// Illustrative C#: uses decimal currency units; not compiled by this repository.
 public class BankAccount
 {
     public string Owner { get; }
@@ -42,22 +42,20 @@ public class BankAccount
 ```
 
 ```javascript
-// JavaScript: same idea with a private field (#).
-class BankAccount {
-  #balance;
-  constructor(owner, opening = 0) {
-    if (!owner) throw new Error('owner required');
-    if (opening < 0) throw new Error('opening must be >= 0');
-    this.owner = owner;
-    this.#balance = opening;
-  }
-  get balance() { return this.#balance; }
-  deposit(amount) {
-    if (amount <= 0) throw new Error('amount must be > 0');
-    this.#balance += amount;
-  }
-}
+// JavaScript: from the repository root with Node >=18.
+// The implementation uses private fields, validated owners and integer cents.
+import { BankAccount } from './examples/bank-account.mjs';
+
+const account = new BankAccount('Ada', 10000); // 100.00 in one currency
+account.deposit(5050);
+account.balanceCents; // 15050; there is no balance setter
 ```
+
+The executable [JavaScript example](../../examples/bank-account.mjs) rejects NaN, Infinity,
+strings, fractional cents, negative opening balances, blank owners and deposit overflow before
+mutating state. Its public amounts use safe integer cents; no implicit numeric coercion occurs.
+Run `node --test scripts/examples.test.mjs` from the repo root. This is an educational in-memory
+account, not a ledger or a complete banking system.
 
 ## Common Pitfalls / Anti-patterns
 - **Anemic objects:** public getters/setters with all logic outside the class — that's a struct, not an object.

@@ -8,7 +8,8 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "validate": "node scripts/validate.mjs",
-    "test": "node --test"
+    "test": "node --test",
+    "check": "npm test && npm run validate"
   },
   "keywords": [
     "ai-agent", "fullstack", "system-prompt", "prompt-engineering",

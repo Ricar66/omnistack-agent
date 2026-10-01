@@ -1,81 +1,74 @@
 # Architecture
 
-omnistack-agent is built on one idea: **author the agent once, ship it everywhere.** This document explains how the single source becomes per-platform adapters, how the two build modes differ, how drift is prevented, and how to add a new platform.
+omnistack-agent authors instructions once and generates per-platform files. It is a prompt and reference library, not a model runtime, tool server, or multiagent orchestrator.
 
-## Single source → build → adapters
+## Source and generated output
 
-There is exactly one place to author content, and one place where output lands:
-
+```text
+core/ + knowledge/ → scripts/build.mjs → adapters/
+                           ↓
+                     source contracts
+                           ↓
+                  scripts/validate.mjs
 ```
-core/  +  knowledge/      ──▶   scripts/build.mjs   ──▶   adapters/
-(the authored source)            (assembles + renders)     (generated, committed)
-```
 
-- **`core/`** — the agent's brain, as numbered Markdown files (`00-identity.md`, `01-principles.md`, …). They are read in filename order and concatenated, so the numeric prefix controls sequence.
-- **`knowledge/`** — a modular knowledge base, one topic per file, organized into domain folders. `knowledge/_index.md` is the navigation hub and is always treated specially (it is the "lean" payload — see below).
-- **`scripts/build.mjs`** — reads the source from disk, calls the pure assembly functions in `scripts/lib.mjs`, and writes one file per platform under `adapters/`.
-- **`adapters/`** — the **generated** output. These files are committed so consumers can clone-and-copy without running anything. They must never be hand-edited.
+- `core/` contains numbered Markdown files for identity, principles, roles, workflow, interaction style, and guardrails. Filename order determines assembly order.
+- `knowledge/` contains domain modules and `_index.md`, the canonical navigation source.
+- `scripts/lib.mjs` defines targets and assembly functions. The build writes generated files; validation computes the expected output and compares it with committed files.
+- `adapters/` is generated and committed so consumers can install without Node or a build step.
+- `examples/` contains executable code and manual evaluation scenarios.
 
-Run the build with:
+Role descriptions guide one assistant's behavior. Actual tools, model selection, permissions, and delegation support come from the host platform.
+
+## Payload modes
+
+| Payload | Core instructions | Knowledge |
+| --- | --- | --- |
+| Full instruction adapter | Complete core | Index and all modules inline |
+| Lean instruction adapter | Complete core | Compact category/module map |
+| Reference bundle | None | Index and all modules inline |
+
+The reference target writes `adapters/reference/knowledge.md` with `includeCore: false`. It is reference content for uploads or filesystem access, rather than another instruction persona.
+
+Lean maps omit contributor templates and module descriptions. Their `knowledge/...` paths identify modules in the source repository. Copying a map does not copy those files or give an assistant access to GitHub. A user can attach the reference bundle or make source files accessible in the project; otherwise the assistant must acknowledge the missing reference. Full adapters include modules in the same file, and their index links serve as conceptual navigation.
+
+## Size and compatibility
+
+Keep the core around **5,800 characters** as an editorial target; the generator does not enforce a separate core-size ceiling. The Custom GPT target has an **8,000-character project budget** for its complete rendered file, counted as Unicode code points. The enforced target budget leaves room for its compact index and generated header; it does not assert a universal host limit.
+
+The original instruction adapter paths remain available. Lean `adapters/claude/CLAUDE.md` and `adapters/windsurf/AGENTS.md` provide smaller installation options. Claude skill/subagent and Cursor adapters still embed full knowledge in this iteration; no separate on-demand reference package is generated for them.
+
+Claude skill and agent frontmatter appears at the beginning of the file. The subagent uses `model: inherit`. Installation details and official platform references are in [platforms.md](platforms.md).
+
+## Validation and drift detection
+
+The generator validates the authored inputs and target contracts before accepting output:
+
+- Index links resolve to registered knowledge modules, with complete module coverage.
+- Modules contain required sections and a valid difficulty marker.
+- Target names, output paths, modes, frontmatter value types, and configured size budgets satisfy their contracts.
+- Generated output matches its source deterministically.
+
+The source check accepts frontmatter values only as strings or null. It does not parse YAML syntax or validate YAML delimiters; tests cover the generated variants.
+
+Generated files include a header and content hash. `npm run validate` checks the expected rendered files against disk, including missing files and byte differences. A matching hash alone is not the completion check.
 
 ```bash
 npm run build
+npm run check
 ```
 
-It prints one line per adapter and a final count (`Built 9 adapters.`).
+`npm run build` writes the adapters. `npm run check` runs tests and validation without writing new adapters, so drift remains visible. CI uses the same checks on Node 18 and 22 across Linux and Windows.
 
-### How a file is assembled
+Unit and integration tests check assembly, invalid inputs, drift detection, and the executable example. They do not measure whether an LLM follows the instructions well; use [the evaluation guide](evaluation.md) for that separate question.
 
-For each target, `build.mjs` produces content in three layers (see `renderTarget` in `scripts/lib.mjs`):
+## Adding a platform
 
-1. **Optional frontmatter** — a YAML block, used by the Claude skill/agent adapters (name, description, model). `null` for platforms that don't need it.
-2. **A generated header** — a `DO NOT EDIT` comment plus a `content-hash`.
-3. **The body** — the assembled `core/` content, then the knowledge payload, separated by `\n\n---\n\n`.
+1. Add a target definition in `scripts/lib.mjs`: unique name, output path under `adapters/`, `full` or `lean` mode, and optional frontmatter or size budget.
+2. Specify whether it includes core instructions. A knowledge-only target must remain clearly labeled as reference content.
+3. Add tests for the target's format and constraints.
+4. Run `npm run build`, then `npm run check`.
+5. Document actual installation and reference availability in [platforms.md](platforms.md) and both READMEs.
+6. Commit the definition and generated files together.
 
-The `core/` portion is the same for every platform. What differs per platform is the **knowledge payload**, controlled by the target's `mode`.
-
-## `full` vs `lean` modes
-
-Each target declares a `mode`:
-
-- **`full`** — the body includes the knowledge index **plus every knowledge module**, sorted by path. Use this where the platform has room for a large system prompt and benefits from the agent carrying its full reference (e.g. Claude skill/agent, ChatGPT system prompt, Cursor, generic).
-- **`lean`** — the body includes **only `knowledge/_index.md`** (the navigation hub), not the individual modules. Use this where the instructions field is small or the platform reads files on demand (e.g. ChatGPT Custom GPT instructions, Copilot, Gemini gem).
-
-Both modes always include the complete `core/` brain — only the knowledge depth changes. The logic lives in `assembleKnowledge(modules, indexBody, mode)`.
-
-## Anti-drift: content hash + `validate`
-
-Because adapters are committed, they can fall out of sync with the source if someone edits `core/`/`knowledge/` but forgets to rebuild — or edits an adapter by hand. Two mechanisms prevent that:
-
-1. **Content hash.** Every generated file embeds a `content-hash` of its body. The build is **deterministic** — no timestamps, stable sort order, normalized separators — so the same source always yields the same bytes (and the same hash).
-2. **`validate`.** Running
-
-   ```bash
-   npm run validate
-   ```
-
-   re-runs the entire build *in memory* and byte-compares the result against what's on disk. If anything differs (or a file is missing), it lists the stale adapters and exits non-zero with `✗ Adapters out of sync`. When everything matches it prints `✓ All 9 adapters in sync.`
-
-CI runs `npm run validate` on every pull request, so a PR that changes the source without committing the regenerated adapters — or that tampers with an adapter directly — fails automatically. The fix is always the same: run `npm run build` and commit the result.
-
-`node --test` runs the unit tests for the pure assembly functions (`scripts/lib.test.mjs`), guarding the build logic itself.
-
-## How to add a new platform
-
-Adding a platform is a one-row change — no new code paths:
-
-1. Open `scripts/lib.mjs` and add a row to the **`TARGETS`** array:
-
-   ```js
-   { name: 'my-platform', outPath: 'adapters/my-platform/instructions.md', mode: 'full', frontmatter: null },
-   ```
-
-   - `name` — a unique identifier for the target.
-   - `outPath` — where the generated file is written, relative to the repo root.
-   - `mode` — `'full'` or `'lean'` (see above).
-   - `frontmatter` — a YAML string if the platform needs one (as the Claude adapters do), otherwise `null`.
-
-2. Run `npm run build`. The new adapter file is created automatically (its parent folder is created if needed).
-3. The test `TARGETS covers all six platforms` enforces the six core platform folders exist; if you add a brand-new platform folder, extend that test's expectations to match.
-4. Document the install steps in [`platforms.md`](platforms.md) and add a row to the usage table in the README.
-5. Commit the source change **and** the newly generated adapter together.
+Consult the platform's official format documentation before adding support. Preserve existing user guidance during installation; generated files should be reviewed and merged into a consumer's project, rather than blindly replacing its instructions.

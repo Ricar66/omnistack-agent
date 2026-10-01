@@ -1,80 +1,85 @@
 ![omnistack-agent](assets/banner.svg)
 
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg) · ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg) · ![Platforms](https://img.shields.io/badge/platforms-ChatGPT%20%C2%B7%20Claude%20%C2%B7%20Copilot%20%C2%B7%20Gemini%20%C2%B7%20Cursor%20%C2%B7%20Generic-blue.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg) · ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg) · ![Platforms](https://img.shields.io/badge/platforms-ChatGPT%20%C2%B7%20Claude%20%C2%B7%20Copilot%20%C2%B7%20Gemini%20%C2%B7%20Cursor%20%C2%B7%20Windsurf%20%C2%B7%20Generic-blue.svg)
 
 **[🇧🇷 Ler em Português](README.pt-BR.md)**
 
 ## What is this
 
-**omnistack-agent** is an open-source, platform-agnostic system prompt that turns any capable AI model into a **Full Stack Software Engineering Specialist** — one agent that fluidly takes on whichever engineering role a task needs, with object-oriented design as its default lens. The agent's "brain" is authored once in a single source (`core/` + `knowledge/`) and compiled by a tested, zero-dependency Node script into ready-to-use adapter files for every major AI platform. You don't write prompts — you copy a file.
+**omnistack-agent** is an open-source collection of instructions and software-engineering references for AI assistants. A single source (`core/` + `knowledge/`) generates adapters for several platforms using a tested Node script with no npm dependencies.
 
-It can take on all ten of these roles:
+It gives one assistant twelve engineering roles. It does not run an independent multiagent system or grant tools, permissions, or access to your files.
 
-- **Software Architect** — system structure, boundaries, and trade-offs (ADRs included).
-- **Full Stack Developer** — end-to-end features across UI, API, and data.
-- **Mobile Developer** — native and cross-platform apps, offline, and push.
-- **Backend Engineer** — domain logic, services, jobs, and data integrity.
-- **Frontend Engineer** — accessible, performant UIs and predictable state.
-- **Database Administrator** — schemas, indexing, migrations, and tuning.
-- **DevOps Engineer** — CI/CD, Infrastructure as Code, and rollbacks.
-- **QA Engineer** — test plans, automated suites, and sharp bug reports.
-- **Technical Writer** — READMEs, API references, and architecture docs.
-- **Software Mentor** — the *why* behind the code, with runnable examples.
+- **Software Architect** — boundaries, trade-offs, and architecture decisions.
+- **Full Stack Developer** — features across UI, APIs, and data.
+- **Mobile Developer** — native and cross-platform apps.
+- **Backend Engineer** — services, domain logic, and data integrity.
+- **Frontend Engineer** — accessible interfaces and predictable state.
+- **Database Administrator** — schemas, indexes, migrations, and tuning.
+- **DevOps Engineer** — CI/CD, infrastructure, deployments, and rollback.
+- **QA Engineer** — test strategy, regression checks, and bug reports.
+- **Security Engineer** — trust boundaries, threats, and secure defaults.
+- **Code Reviewer** — actionable findings supported by file and line evidence.
+- **Technical Writer** — READMEs, API references, and architecture guides.
+- **Software Mentor** — explanations with examples you can run.
 
-## ▶️ How to use
+The instructions encourage proportional changes, evidence before conclusions, respect for existing project conventions, and explicit handling of missing tools or information. Object-oriented design is an available approach; choose abstractions that fit the problem.
 
-Pick your platform, copy the listed file's contents, and paste it where that platform expects its instructions. No build step is required to consume the agent — the adapters are pre-generated and committed.
+## How to use
 
-| Platform | File to copy | How to install |
+The adapters are already generated and committed. You do not need Node or a build step to use them. Review the instructions and merge them with any existing project guidance before installation.
+
+| Platform | Adapter | Installation |
 | --- | --- | --- |
-| **ChatGPT** (Custom GPT) | [`adapters/chatgpt/custom-gpt-instructions.md`](adapters/chatgpt/custom-gpt-instructions.md) | Create a new GPT → open **Configure** → paste the file into the **Instructions** box (this is the lean variant). For the complete knowledge inlined (larger; best used as an API system prompt), use [`adapters/chatgpt/system-prompt.md`](adapters/chatgpt/system-prompt.md). |
-| **Claude** (Skill) | [`adapters/claude/SKILL.md`](adapters/claude/SKILL.md) | Drop the file into your project's skills folder (e.g. `.claude/skills/omnistack-agent/SKILL.md`); it ships with YAML frontmatter and is user-invocable. |
-| **Claude** (Agent) | [`adapters/claude/agent.md`](adapters/claude/agent.md) | Register it as a subagent in `.claude/agents/`; the frontmatter already sets the name, description, and model. For repo-wide guidance instead, use [`adapters/claude/AGENTS.md`](adapters/claude/AGENTS.md). |
-| **GitHub Copilot** | [`adapters/copilot/copilot-instructions.md`](adapters/copilot/copilot-instructions.md) | Save it as `.github/copilot-instructions.md` at your repository root → reload Copilot. |
-| **Gemini** (Gem) | [`adapters/gemini/gem-instructions.md`](adapters/gemini/gem-instructions.md) | Create a new Gem in Gemini → paste the file into the **Instructions** field → save. |
-| **Cursor / Windsurf** | [`adapters/cursor/AGENTS.md`](adapters/cursor/AGENTS.md) | Place it as `AGENTS.md` at your project root so the editor picks it up automatically. |
-| **Generic** (any LLM) | [`adapters/generic/system-prompt.md`](adapters/generic/system-prompt.md) | Paste the file as the **system prompt** of any chat or API request (OpenAI, Anthropic, local models, etc.). |
+| **ChatGPT** (Custom GPT, where available) | [custom-gpt-instructions.md](adapters/chatgpt/custom-gpt-instructions.md) | Paste the lean file into **Instructions**. Optionally upload [knowledge.md](adapters/reference/knowledge.md) as reference knowledge. |
+| **Claude Code** (project guidance) | [CLAUDE.md](adapters/claude/CLAUDE.md) | Merge the lean instructions into your project’s `CLAUDE.md`. |
+| **Claude Code** (subagent) | [agent.md](adapters/claude/agent.md) | Save in `.claude/agents/`. Its model setting inherits your session’s model. |
+| **Claude Code** (skill) | [SKILL.md](adapters/claude/SKILL.md) | Save as `.claude/skills/omnistack-agent/SKILL.md`; invoke `/omnistack-agent`. This variant includes the full knowledge. |
+| **GitHub Copilot** | [copilot-instructions.md](adapters/copilot/copilot-instructions.md) | Merge into `.github/copilot-instructions.md`. |
+| **Gemini** (Gem, where available) | [gem-instructions.md](adapters/gemini/gem-instructions.md) | Paste into **Instructions**. Optionally add [knowledge.md](adapters/reference/knowledge.md) under **Knowledge**. |
+| **Cursor** | [AGENTS.md](adapters/cursor/AGENTS.md) | Merge into your project’s root `AGENTS.md`. This variant includes the full knowledge. |
+| **Windsurf / Cascade** | [AGENTS.md](adapters/windsurf/AGENTS.md) | Merge the dedicated lean adapter into your project’s root `AGENTS.md`. |
+| **API / other LLMs** | [system-prompt.md](adapters/generic/system-prompt.md) | Use the instruction interface supported by your provider, within its context limits. This variant includes the full knowledge. |
 
-> Full per-platform walkthroughs with screenshots-worthy detail live in [`docs/platforms.md`](docs/platforms.md).
+**Lean** includes core instructions and a module index. The index is a map, not the module contents: references are usable only when attached or accessible in your project. **Full** includes the complete knowledge inline and costs more context. The Custom GPT adapter has a project budget of **8,000 characters**, not a universal platform limit.
 
-## 🤝 How to contribute
+See [the installation guide](docs/platforms.md) for existing-file safety, reference setup, Claude `AGENTS.md` compatibility, and the full API variants.
 
-Contributions are welcome — new knowledge modules, language seeds, fixes, and translations all help. There is **one golden rule**:
+## Examples and evaluation
 
-> **Edit `core/` or `knowledge/` — never edit `adapters/`.** The adapter files are *generated*. Hand-edits are overwritten by the next build and rejected by CI.
+[Examples](examples/README.md) include an executable account example and [manual evaluation scenarios](examples/evaluation-cases.md) covering debugging, features, security, reviews, version checks, architecture, unavailable tools, and money boundaries.
 
-The workflow:
+The scenarios are test inputs and expected evidence, not recorded AI responses or measured quality claims. Use the [evaluation guide](docs/evaluation.md) to compare prompts under the same model and tool setup. Automated checks validate repository contracts and executable examples; they do not establish the quality of model responses.
 
-1. **Edit the source.** Change a numbered file in `core/`, or add/update a module under `knowledge/` (and link it in `knowledge/_index.md`).
-2. **Rebuild the adapters.** Run `npm run build` to regenerate every file under `adapters/`.
-3. **Verify.** Run `node --test` (unit tests) and `npm run validate` (confirms the adapters match the source).
-4. **Open a PR.** CI runs `npm run validate`, so a PR fails if the committed adapters drift from `core/` + `knowledge/`. Always commit the regenerated adapters alongside your source change.
+## How to contribute
 
-Requirements: **Node ≥ 18**, zero npm dependencies. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the full guide, including the knowledge-module template and commit conventions.
+> Edit `core/`, `knowledge/`, or the build scripts to change generated output. Never edit `adapters/` by hand.
 
-## 🗂️ Repository structure
+1. Change the source. Register new modules in `knowledge/_index.md`.
+2. Regenerate the adapters with `npm run build`.
+3. Run `npm run check` for tests and validation.
+4. Commit source and regenerated output together, then open a pull request.
+
+`npm run check` does **not** rebuild adapters, so it catches committed output that has drifted from the source. Node **≥ 18** is required for contributor commands; no npm installation is needed.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow and [adding knowledge](docs/adding-knowledge.md) for the module template.
+
+## Repository structure
 
 ```text
-omnistack-agent/
-├── core/        # The agent's brain (single source): identity, principles,
-│                #   capabilities, workflow, interaction style, guardrails.
-├── knowledge/   # Modular knowledge base — one topic per Markdown file,
-│                #   indexed by knowledge/_index.md.
-├── adapters/    # GENERATED per-platform output. Do not edit by hand.
-├── scripts/     # Zero-dependency Node build (build.mjs), drift-detecting
-│                #   validate (validate.mjs), pure lib + tests.
-├── docs/        # Guides: architecture, adding knowledge, platforms.
-└── assets/      # Banner and other static media.
+core/        # Authored identity, roles, workflow, style, and guardrails
+knowledge/   # Authored reference modules and their index
+adapters/    # Generated instructions and knowledge bundle
+scripts/     # Dependency-free build, validation, and tests
+examples/    # Executable example and manual evaluation scenarios
+docs/        # Installation, architecture, contribution, and evaluation guides
+assets/      # Banner and static media
 ```
 
-## 🛣️ Roadmap
+## Next improvements
 
-- More languages and frameworks in `knowledge/` (Python, Go, Rust, Vue, Angular, .NET MAUI, and more).
-- Additional platform adapters as new AI tools emerge.
-- A curated `examples/` folder with real prompts and the agent's responses.
-- A full Brazilian-Portuguese translation of the knowledge modules (the README and docs are already bilingual).
-- Deeper modules per domain, expanding the seeds into complete references.
+The [improvement plan](docs/improvement-plan.md) tracks the current changes and candidates for later work: TypeScript and more domain modules, platform reference packages, and recorded model evaluations. Changes should follow evidence from real use.
 
-## 📄 License
+## License
 
-Released under the **MIT License** — free to use, modify, and distribute. See [`LICENSE`](LICENSE).
+Released under the **MIT License**. See [LICENSE](LICENSE).

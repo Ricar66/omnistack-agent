@@ -22,11 +22,13 @@
 ## Best Practices
 
 - Use nouns and HTTP verbs; let the method convey the action, not the URL.
-- Validate every input and return `422` with field-level messages, not a bare `400`.
+- Validate inputs with structured field errors. Use `400` for malformed requests and `422` for
+  semantically invalid content when that distinction fits the documented contract.
 - Page all collection endpoints and document the limits.
 - Keep one error envelope for the whole API; include a stable error `code`, a human `message`, and
   details.
-- Make writes idempotent so clients can retry safely on network failure.
+- For retryable writes, define idempotency-key scope, persistence, retention and payload matching;
+  a header alone does not prevent duplicate charges or orders.
 
 ## Patterns & Examples
 
@@ -42,7 +44,6 @@ DELETE /v1/orders/43                              →  204 No Content
 ```
 
 ```json
-// One consistent error envelope, returned on every failure (here: 422 validation).
 {
   "error": {
     "code": "VALIDATION_FAILED",
@@ -54,10 +55,13 @@ DELETE /v1/orders/43                              →  204 No Content
 }
 ```
 
-**Auth (one paragraph):** *token-based* auth (a bearer JWT/opaque token sent per request) is stateless
-and scales horizontally — ideal for APIs and SPAs/mobile; *session-based* auth keeps state server-side
-behind a cookie — simpler for classic server-rendered web apps. Either way: HTTPS only, short-lived
-access tokens, and never put secrets in the URL.
+**Authentication:** distinguish token format (JWT or opaque), transport (Authorization header or
+cookie), and server state. A JWT can be verified locally but may still use revocation or session
+state; opaque tokens commonly require a shared lookup. Either can travel in a header or cookie,
+and either architecture can scale with appropriate shared storage. Check expiry, issuer, audience,
+allowed algorithms and revocation policy where applicable. Use HTTPS and never put credentials
+in URLs. Cookie-authenticated writes need CSRF protection; use HttpOnly/Secure/SameSite cookie
+settings appropriate to the app. Authenticate callers, then authorize each resource and tenant.
 
 **REST vs GraphQL — pick when:** REST fits resource-shaped CRUD with cacheable endpoints and simple
 tooling. GraphQL fits clients that need flexible, nested selections and want to avoid over/under-

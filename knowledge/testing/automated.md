@@ -29,7 +29,8 @@
 ## Patterns & Examples
 
 ```csharp
-// C# with xUnit — Arrange-Act-Assert, one behavior per test.
+// Illustrative C# with xUnit; requires the C# class from the OOP module.
+// This repository does not include a .NET project or execute these tests.
 public class BankAccountTests
 {
     [Fact]
@@ -50,22 +51,38 @@ public class BankAccountTests
 ```
 
 ```javascript
-// JavaScript with the built-in node:test runner — zero dependencies.
+// Excerpt for a file in scripts/: Node >=18, built-in runner, zero dependencies.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { BankAccount } from './bank-account.js';
+import { BankAccount } from '../examples/bank-account.mjs';
 
-test('deposit increases the balance', () => {
-  const account = new BankAccount('Ada', 100);   // Arrange
-  account.deposit(50);                            // Act
-  assert.equal(account.balance, 150);             // Assert
+test('deposits add integer cents exactly across multiple operations', () => {
+  const account = new BankAccount('Ada', 100);
+  account.deposit(50);
+  account.deposit(1);
+  assert.equal(account.balanceCents, 151);
 });
 
-test('deposit rejects a non-positive amount', () => {
-  const account = new BankAccount('Ada', 100);
-  assert.throws(() => account.deposit(0), /amount must be > 0/);
+test('overflowing deposits fail before mutating the balance', () => {
+  const account = new BankAccount('Ada', Number.MAX_SAFE_INTEGER);
+  assert.throws(() => account.deposit(1), /balanceCents/);
+  assert.equal(account.balanceCents, Number.MAX_SAFE_INTEGER);
 });
 ```
+
+The complete [tests](../../scripts/examples.test.mjs) import the real
+[implementation](../../examples/bank-account.mjs), including invalid owners, strings, NaN,
+Infinity, fractional cents, overflow and unchanged state after rejection.
+
+```sh
+# From the repository root:
+node --test scripts/examples.test.mjs
+npm test
+```
+
+Report the command, scope and actual outcome of checks. A proposed test or an unavailable runner
+is **not run**, not passed. These JavaScript unit tests do not verify the illustrative C# or SQL
+snippets, database concurrency, production integrations, or the quality of an AI response.
 
 ## Common Pitfalls / Anti-patterns
 
