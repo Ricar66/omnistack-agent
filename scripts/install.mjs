@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
+import { realpath } from 'node:fs/promises';
 import { InstallerError, loadPackage, manageSkills } from './installer-lib.mjs';
 
 const PACKAGE_ROOT = fileURLToPath(new URL('../packages/', import.meta.url));
@@ -66,6 +67,14 @@ export async function main(args = process.argv.slice(2)) {
   }
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+let invokedPath;
+if (process.argv[1]) {
+  try {
+    invokedPath = await realpath(resolve(process.argv[1]));
+  } catch (error) {
+    if (!['ENOENT', 'ENOTDIR'].includes(error.code)) throw error;
+  }
+}
+if (invokedPath && invokedPath === await realpath(fileURLToPath(import.meta.url))) {
   process.exitCode = await main();
 }

@@ -258,6 +258,16 @@ test('CLI resolves its bundle relative to the script even when run from another 
   const version = spawnSync(process.execPath, [cli, '--version'], { cwd: project, encoding: 'utf8' });
   assert.equal(version.status, 0, version.stderr);
   assert.equal(version.stdout.trim(), '0.2.0');
+  const aliasDirectory = join(root, 'linked scripts');
+  await symlink(scripts, aliasDirectory, process.platform === 'win32' ? 'junction' : 'dir');
+  const aliasVersion = spawnSync(process.execPath, [join(aliasDirectory, 'install.mjs'), '--version'], { cwd: project, encoding: 'utf8' });
+  assert.equal(aliasVersion.status, 0, aliasVersion.stderr);
+  assert.equal(aliasVersion.stdout.trim(), '0.2.0', 'a linked CLI entrypoint must execute main');
+  const imported = spawnSync(process.execPath, ['--input-type=module', '-'], {
+    cwd: project, encoding: 'utf8', input: `await import(${JSON.stringify(new URL('./install.mjs', scriptRoot).href)}); console.log('imported');`,
+  });
+  assert.equal(imported.status, 0, imported.stderr);
+  assert.equal(imported.stdout.trim(), 'imported', 'importing the CLI must not execute main');
   const preview = spawnSync(process.execPath, [cli, 'install', '--platform', 'codex', '--project', project, '--dry-run'], { cwd: project, encoding: 'utf8' });
   assert.equal(preview.status, 0, preview.stderr);
   assert.match(preview.stdout, /Preview: install/);
