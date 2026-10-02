@@ -1,0 +1,2 @@
+$omnistack-code-review
+Review src/access.mjs. Only users with the exact "admin" role may delete; checking access must not modify the user. Return actionable findings with severity and file/line location. Do not change files. Include a regression check and distinguish checks you actually ran from proposed ones. Keep the review within this fixture.

@@ -4,82 +4,97 @@
 
 **[🇺🇸 Read in English](README.md)**
 
-## O que é
+**omnistack-agent** ajuda um assistente de IA a depurar código, revisar mudanças, implementar funcionalidades e explicar decisões de engenharia com evidências. Oferece skills curtas por tarefa e referências de engenharia, geradas de uma fonte única sem dependências npm.
 
-**omnistack-agent** é uma coleção open-source de instruções e referências de engenharia de software para assistentes de IA. Uma fonte única (`core/` + `knowledge/`) gera adaptadores para várias plataformas usando um script Node testado e sem dependências npm.
+Um assistente pode usar doze papéis de engenharia. Ferramentas, permissões, seleção de modelo e delegação vêm da plataforma onde ele roda.
 
-Um único assistente pode assumir doze papéis de engenharia. O projeto não executa um sistema independente de múltiplos agentes nem concede ferramentas, permissões ou acesso aos seus arquivos.
+## Comece com uma tarefa
 
-- **Arquiteto de Software** — fronteiras, trade-offs e decisões de arquitetura.
-- **Desenvolvedor Full Stack** — funcionalidades entre UI, APIs e dados.
-- **Desenvolvedor Mobile** — aplicativos nativos e multiplataforma.
-- **Engenheiro Backend** — serviços, lógica de domínio e integridade dos dados.
-- **Engenheiro Frontend** — interfaces acessíveis e estado previsível.
-- **Administrador de Banco de Dados** — esquemas, índices, migrações e otimização.
-- **Engenheiro DevOps** — CI/CD, infraestrutura, deploy e rollback.
-- **Engenheiro de QA** — estratégia de testes, regressão e relatos de bugs.
-- **Engenheiro de Segurança** — fronteiras de confiança, ameaças e padrões seguros.
-- **Revisor de Código** — achados acionáveis com evidências de arquivo e linha.
-- **Redator Técnico** — READMEs, referências de API e guias de arquitetura.
-- **Mentor de Software** — explicações com exemplos executáveis.
+Use Node **≥ 18** para o instalador e as demonstrações executáveis. Os arquivos gerados já estão versionados; não é necessário fazer build nem `npm install`.
 
-As instruções incentivam mudanças proporcionais, evidências antes das conclusões, respeito às convenções do projeto e tratamento explícito de informações ou ferramentas indisponíveis. Orientação a objetos é uma opção; escolha abstrações que façam sentido para o problema.
+1. Clone o repositório e escolha sua plataforma.
+2. Veja a prévia de instalação de uma skill em um **projeto existente** e depois instale.
+3. Experimente um [prompt de demonstração](examples/showcase/README.md) em um ambiente descartável.
+4. Execute as verificações e compare o resultado com o contrato documentado.
 
-## Como usar
-
-Os adaptadores já estão gerados e versionados. Você não precisa de Node nem de build para usá-los. Revise as instruções e mescle com qualquer orientação existente no projeto antes de instalar.
-
-| Plataforma | Adaptador | Instalação |
-| --- | --- | --- |
-| **ChatGPT** (Custom GPT, quando disponível) | [custom-gpt-instructions.md](adapters/chatgpt/custom-gpt-instructions.md) | Cole a versão enxuta em **Instructions**. Opcionalmente, envie [knowledge.md](adapters/reference/knowledge.md) como conhecimento de referência. |
-| **Claude Code** (orientação do projeto) | [CLAUDE.md](adapters/claude/CLAUDE.md) | Mescle as instruções enxutas no `CLAUDE.md` do projeto. |
-| **Claude Code** (subagente) | [agent.md](adapters/claude/agent.md) | Salve em `.claude/agents/`. A configuração de modelo herda o modelo da sessão. |
-| **Claude Code** (skill) | [SKILL.md](adapters/claude/SKILL.md) | Salve como `.claude/skills/omnistack-agent/SKILL.md`; invoque `/omnistack-agent`. Esta versão inclui todo o conhecimento. |
-| **GitHub Copilot** | [copilot-instructions.md](adapters/copilot/copilot-instructions.md) | Mescle em `.github/copilot-instructions.md`. |
-| **Gemini** (Gem, quando disponível) | [gem-instructions.md](adapters/gemini/gem-instructions.md) | Cole em **Instructions**. Opcionalmente, adicione [knowledge.md](adapters/reference/knowledge.md) em **Knowledge**. |
-| **Cursor** | [AGENTS.md](adapters/cursor/AGENTS.md) | Mescle no `AGENTS.md` da raiz do projeto. Esta versão inclui todo o conhecimento. |
-| **Windsurf / Cascade** | [AGENTS.md](adapters/windsurf/AGENTS.md) | Mescle o adaptador enxuto dedicado no `AGENTS.md` da raiz do projeto. |
-| **API / outros LLMs** | [system-prompt.md](adapters/generic/system-prompt.md) | Use a interface de instruções do seu provedor, respeitando os limites de contexto. Esta versão inclui todo o conhecimento. |
-
-**Lean** contém as instruções centrais e um índice de módulos. O índice é um mapa, não o conteúdo dos módulos: as referências só podem ser usadas quando anexadas ou acessíveis no projeto. **Full** inclui o conhecimento completo no arquivo e consome mais contexto. O adaptador Custom GPT tem um orçamento do projeto de **8.000 caracteres**, não um limite universal da plataforma.
-
-Veja [o guia de instalação](docs/platforms.md) para preservar arquivos existentes, configurar referências, entender a compatibilidade de `AGENTS.md` no Claude e usar as versões completas em APIs.
-
-## Exemplos e avaliação
-
-Os [exemplos](examples/README.md) incluem uma conta executável e [cenários de avaliação manual](examples/evaluation-cases.md) de depuração, funcionalidades, segurança, revisão, versões, arquitetura, ferramentas indisponíveis e limites monetários.
-
-Os cenários são entradas de teste e evidências esperadas, não respostas de IA registradas nem resultados medidos de qualidade. Use [o guia de avaliação](docs/evaluation.md) para comparar prompts com o mesmo modelo e as mesmas ferramentas. As verificações automatizadas validam contratos do repositório e exemplos executáveis; não comprovam a qualidade das respostas dos modelos.
-
-## Como contribuir
-
-> Para alterar a saída gerada, edite `core/`, `knowledge/` ou os scripts de build. Nunca edite `adapters/` manualmente.
-
-1. Altere a fonte. Registre novos módulos em `knowledge/_index.md`.
-2. Gere os adaptadores com `npm run build`.
-3. Execute `npm run check` para testar e validar.
-4. Versione a fonte e a saída gerada juntas e abra um pull request.
-
-`npm run check` **não** regenera adaptadores, para detectar divergência entre a saída versionada e a fonte. Os comandos de contribuição exigem Node **≥ 18**; não é necessário instalar dependências npm.
-
-Veja [CONTRIBUTING.md](CONTRIBUTING.md) para o fluxo e [como adicionar conhecimento](docs/adding-knowledge.md) para o template dos módulos.
-
-## Estrutura do repositório
-
-```text
-core/        # Identidade, papéis, fluxo, estilo e guardrails escritos na fonte
-knowledge/   # Módulos de referência e índice escritos na fonte
-adapters/    # Instruções e pacote de conhecimento gerados
-scripts/     # Build, validação e testes sem dependências
-examples/    # Exemplo executável e cenários de avaliação manual
-docs/        # Guias de instalação, arquitetura, contribuição e avaliação
-assets/      # Banner e mídia estática
+```bash
+git clone https://github.com/Ricar66/omnistack-agent.git
+cd omnistack-agent
+node scripts/install.mjs install --platform claude --project "/caminho/do/seu-projeto" --skill omnistack-debug --dry-run
+node scripts/install.mjs install --platform claude --project "/caminho/do/seu-projeto" --skill omnistack-debug
+npm run demo
 ```
 
-## Próximas melhorias
+Troque o caminho por um diretório existente. Para `--platform`, escolha `claude`, `copilot`, `cursor` ou `codex`. No Claude Code, invoque `/omnistack-debug`; os outros hosts descobrem skills pelos próprios controles. Confira se a plataforma realmente carregou a skill.
 
-O [plano de melhorias](docs/improvement-plan.md) acompanha esta rodada e candidatos para as próximas: TypeScript e mais módulos de domínio, pacotes de referência por plataforma e avaliações registradas com modelos. As mudanças devem seguir evidências de uso real.
+| Skill | Quando usar |
+| --- | --- |
+| [omnistack-agent](packages/skills/omnistack-agent/SKILL.md) | Trabalho geral de engenharia entre os doze papéis |
+| [omnistack-debug](packages/skills/omnistack-debug/SKILL.md) | Reproduzir um bug, isolar sua causa e verificar uma correção pequena |
+| [omnistack-code-review](packages/skills/omnistack-code-review/SKILL.md) | Achados acionáveis com gravidade, arquivo/linha e impacto |
+| [omnistack-security-review](packages/skills/omnistack-security-review/SKILL.md) | Fronteiras de confiança, caminhos reais de ataque e mitigações proporcionais |
 
-## Licença
+Cada pacote inclui seus próprios arquivos de referência; os links do índice não dependem de outro clone. O instalador mostra os destinos, recusa conflitos e não altera instalações idênticas. Ele não substitui as orientações do seu projeto. Veja o [início rápido](docs/quickstart.md) e o [guia de instalação](docs/platforms.md), incluindo a remoção segura.
+
+## Três demonstrações que você pode repetir
+
+```text
+cart: initial check failed as expected; solution checks passed
+permissions: initial check failed as expected; solution checks passed
+tasks: initial check failed as expected; solution checks passed
+3 maintainer-authored demonstrations verified; no model responses evaluated.
+```
+
+Esta é a saída de `npm run demo`: um bug de total monetário, um bug de verificação de acesso e uma funcionalidade limitada de filtro de tarefas. Os [prompts, exemplos iniciais, soluções e verificações](examples/showcase/README.md) estão disponíveis para inspeção.
+
+As soluções foram escritas pelo mantenedor. As verificações comprovam o comportamento das demonstrações, não medem a qualidade dos modelos. O [guia de avaliação](docs/evaluation.md) explica como salvar e comparar respostas reais com o mesmo modelo e as mesmas ferramentas.
+
+[Duas tentativas reais de revisão no Codex](docs/evaluation-runs/2026-10-01/README.md) registram uma resposta observada e um bloqueio de leitura pela política da sessão; não são um benchmark comparativo.
+
+## Outros adaptadores de plataforma
+
+Os adaptadores Markdown existentes podem ser usados manualmente sem Node. Revise e mescle o conteúdo com as regras existentes do projeto.
+
+| Plataforma | Adaptador | Uso |
+| --- | --- | --- |
+| ChatGPT Custom GPT | [custom-gpt-instructions.md](adapters/chatgpt/custom-gpt-instructions.md) | Cole em Instructions; opcionalmente anexe [knowledge.md](adapters/reference/knowledge.md) |
+| Orientações do projeto no Claude Code | [CLAUDE.md](adapters/claude/CLAUDE.md) | Mescle no `CLAUDE.md` do projeto |
+| Subagente Claude Code | [agent.md](adapters/claude/agent.md) | Salve em `.claude/agents/`; o modelo herda a sessão |
+| Orientações do projeto no GitHub Copilot | [copilot-instructions.md](adapters/copilot/copilot-instructions.md) | Mescle em `.github/copilot-instructions.md` |
+| Gemini Gem | [gem-instructions.md](adapters/gemini/gem-instructions.md) | Cole em Instructions; opcionalmente anexe o pacote de referências |
+| Orientações do projeto no Cursor | [AGENTS.md](adapters/cursor/AGENTS.md) | Mescle no `AGENTS.md` da raiz; conhecimento completo |
+| Windsurf / Cascade | [AGENTS.md](adapters/windsurf/AGENTS.md) | Mescle no `AGENTS.md` da raiz; enxuto |
+| API / outros LLMs | [system-prompt.md](adapters/generic/system-prompt.md) | Use a interface de instruções e os limites de contexto do provedor |
+
+Adaptadores **lean** contêm as instruções centrais e um mapa de módulos. Precisam de referências acessíveis ou anexadas. Adaptadores **full** incluem todo o conhecimento e consomem mais contexto. A [skill Claude em arquivo único](adapters/claude/SKILL.md) continua disponível; os pacotes modulares acima carregam arquivos de apoio conforme a tarefa. O adaptador Custom GPT tem um **orçamento do projeto de 8.000 caracteres**, não um limite universal de plataforma.
+
+## Cobertura de engenharia
+
+As referências cobrem arquitetura, OOP, JavaScript, TypeScript, C#, SQL, frontend, backend, mobile, bancos de dados, DevOps, testes, segurança e documentação. As instruções incentivam mudanças proporcionais, respeito às convenções, limites claros de capacidade e verificações observadas antes de declarar conclusão. Escolha abstrações adequadas à tarefa.
+
+Os doze papéis são Arquiteto, Desenvolvedor Full Stack, Desenvolvedor Mobile, Engenheiro Backend, Engenheiro Frontend, Administrador de Banco de Dados, Engenheiro DevOps, Engenheiro de QA, Engenheiro de Segurança, Revisor de Código, Redator Técnico e Mentor de Software.
+
+## Contribua
+
+> Edite `core/`, `workflows/`, `knowledge/` ou scripts. Nunca edite `adapters/` ou `packages/` manualmente.
+
+```bash
+npm run build
+npm run check
+npm run demo
+```
+
+`npm run check` testa e valida a saída versionada sem regenerá-la, para detectar divergências. Veja [CONTRIBUTING.md](CONTRIBUTING.md), [como adicionar conhecimento](docs/adding-knowledge.md) e o [plano de melhorias](docs/improvement-plan.md).
+
+```text
+core/        # Instruções de engenharia compartilhadas
+workflows/   # Fontes das skills focadas em tarefas
+knowledge/   # Módulos de referência e índice canônico
+adapters/    # Instruções de plataforma legadas e geradas
+packages/    # Skills modulares, referências e manifesto gerados
+scripts/     # Build, validação, instalador, demonstrações e testes
+examples/    # Exemplos executáveis e cenários de avaliação
+docs/        # Início rápido, instalação, arquitetura e avaliação
+```
 
 Distribuído sob a **Licença MIT**. Veja [LICENSE](LICENSE).

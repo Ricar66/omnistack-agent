@@ -8,6 +8,13 @@ const MODULE_HEADINGS = [
   'Common Pitfalls / Anti-patterns', 'References',
 ];
 
+/** Paths used by generated packages must work on Windows and POSIX. */
+export function portableRelativePath(value) {
+  return typeof value === 'string' && Boolean(value) && !value.includes('\\')
+    && !posix.isAbsolute(value) && value.split('/').every((part) => part && part !== '.' && part !== '..'
+      && !/[\x00-\x1f\x7f<>:"|?*]/.test(part) && !/[. ]$/.test(part)
+      && !/^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(part));
+}
 /** Normalize checkouts from either OS, including a leading UTF-8 BOM. */
 export function normalizeEol(str) {
   return str.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
@@ -57,7 +64,7 @@ export function knowledgeLinks(indexBody) {
         throw new Error(`knowledge/_index.md: unsafe link ${href}.`);
       }
       const modulePath = posix.normalize(`knowledge/${relativePath}`);
-      if (!modulePath.startsWith('knowledge/') || modulePath === 'knowledge/_index.md'
+      if (!portableRelativePath(modulePath) || !modulePath.startsWith('knowledge/') || modulePath === 'knowledge/_index.md'
         || !modulePath.endsWith('.md')) {
         throw new Error(`knowledge/_index.md: invalid module link ${href}.`);
       }
@@ -76,13 +83,15 @@ export function validateSources({ coreFiles, indexBody, modules }) {
   if (!indexBody.trim()) throw new Error('knowledge/_index.md: source is missing or empty.');
   if (!modules.length) throw new Error('knowledge/: no modules found.');
   const paths = new Set();
+  const portablePaths = new Set();
   for (const module of modules) {
-    if (!module.path.startsWith('knowledge/') || /[\\:\0]/.test(module.path)
+    if (!portableRelativePath(module.path) || !module.path.startsWith('knowledge/') || /[\\:\0]/.test(module.path)
       || module.path.split('/').some((part) => !part || part === '.' || part === '..')
       || !module.path.endsWith('.md')) {
       throw new Error(`Invalid knowledge module path: ${module.path}.`);
     }
-    if (paths.has(module.path)) throw new Error(`Duplicate knowledge module: ${module.path}.`);
+    if (portablePaths.has(module.path.toLowerCase())) throw new Error(`Duplicate knowledge module: ${module.path}.`);
+    portablePaths.add(module.path.toLowerCase());
     paths.add(module.path);
     if (!module.body.trim()) throw new Error(`${module.path}: source is empty.`);
     const text = withoutFencedCode(module.body);
@@ -122,7 +131,7 @@ export function validateTargets(targets) {
     if (names.has(target.name)) throw new Error(`Duplicate adapter name: ${target.name}.`);
     names.add(target.name);
     if (!MODES.has(target.mode)) throw new Error(`${target.name}: invalid mode "${target.mode}"; use full or lean.`);
-    if (typeof target.outPath !== 'string' || !target.outPath.startsWith('adapters/')
+    if (!portableRelativePath(target.outPath) || !target.outPath.startsWith('adapters/')
       || /[\\:\0]/.test(target.outPath)
       || target.outPath.split('/').some((part) => !part || part === '.' || part === '..')) {
       throw new Error(`${target.name}: unsafe output path "${target.outPath}"; use a relative path under adapters/.`);

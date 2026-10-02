@@ -4,9 +4,10 @@ import { mkdtemp, mkdir, readFile, writeFile, rm, access, copyFile } from 'node:
 import { join, dirname, basename } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
-import { buildAll, writeAdapters, ROOT } from './build.mjs';
+import { buildAll, writeAdapters, writeDistribution, ROOT } from './build.mjs';
 import { validateAll } from './validate.mjs';
 import { TARGETS, characterCount } from './lib.mjs';
+import { SKILLS } from './packages.mjs';
 
 const moduleBody = (name) => `# ${name}
 ## Concepts
@@ -50,8 +51,20 @@ async function withFixture(fn) {
 
 async function copyScripts(root) {
   await mkdir(join(root, 'scripts'));
-  await Promise.all(['lib.mjs', 'build.mjs', 'validate.mjs'].map((name) =>
+  await Promise.all(['lib.mjs', 'build.mjs', 'validate.mjs', 'packages.mjs'].map((name) =>
     copyFile(join(ROOT, 'scripts', name), join(root, 'scripts', name))));
+  await mkdir(join(root, 'workflows'));
+  await Promise.all(['omnistack-agent', 'omnistack-debug', 'omnistack-code-review', 'omnistack-security-review'].map((name) =>
+    copyFile(join(ROOT, 'workflows', name + '.md'), join(root, 'workflows', name + '.md'))));
+  await writeFile(join(root, 'package.json'), '{"version":"0.2.0"}', 'utf8');
+  const paths = [...new Set(SKILLS.flatMap((skill) => skill.modules || []))];
+  for (const path of paths) {
+    await mkdir(dirname(join(root, 'knowledge', path)), { recursive: true });
+    await writeFile(join(root, 'knowledge', path), moduleBody(path), 'utf8');
+  }
+  const indexPath = join(root, 'knowledge/_index.md');
+  const body = await readFile(indexPath, 'utf8');
+  await writeFile(indexPath, `${body}\n${paths.map((path) => `- [${path}](${path})`).join('\n')}\n`, 'utf8');
 }
 
 test('real sources render every configured target deterministically within budgets', async () => {
@@ -123,7 +136,7 @@ test('validate CLI returns failure for drift and success after generation', () =
   const missing = spawnSync(process.execPath, [command], { cwd: root, encoding: 'utf8' });
   assert.equal(missing.status, 1, missing.stderr);
   assert.match(missing.stderr, /out of sync/);
-  await writeAdapters({ root });
+  await writeDistribution({ root });
   const synced = spawnSync(process.execPath, [command], { cwd: root, encoding: 'utf8' });
   assert.equal(synced.status, 0, synced.stderr);
   assert.match(synced.stdout, /adapters in sync/);

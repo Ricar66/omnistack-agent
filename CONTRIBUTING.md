@@ -11,11 +11,12 @@ Use Node.js **≥ 18**. The build and tests use Node's built-in modules; there a
 | Change | Edit |
 | --- | --- |
 | Identity, roles, workflow, interaction, or guardrails | `core/` |
+| Focused skill workflow or reference selection | `workflows/` and `scripts/packages.mjs` |
 | Engineering reference content | `knowledge/` and its index |
 | Adapter formats, budgets, or output paths | `scripts/` |
 | Installation, examples, or evaluation guidance | `docs/`, `examples/`, or READMEs |
 
-**Never edit `adapters/` by hand.** They are generated, and validation rejects differences from the expected output. Preserve platform-specific compatibility when changing the generator.
+**Never edit `adapters/` or `packages/` by hand.** They are generated, and validation rejects differences from the expected output. Preserve platform-specific compatibility when changing the generator.
 
 ### Workflow
 
@@ -31,7 +32,7 @@ npm run build
 npm run check
 ```
 
-`npm run check` runs tests and validation **without rebuilding**. This is deliberate: CI must detect stale committed adapters rather than silently repairing them. Run `npm test` or `npm run validate` individually when investigating a failure.
+`npm run check` runs tests and validation **without rebuilding**. This is deliberate: CI must detect stale committed adapters rather than silently repairing them. Run `npm test` or `npm run validate` individually when investigating a failure. Use `npm run demo` for the three before/after demonstrations and `npm pack --ignore-scripts` for a local installer archive; packing does not publish to a registry.
 
 CI runs these checks on Linux and Windows with Node 18 and 22. A green check establishes the tested source/build contracts and executable example behavior. For claims about model response quality, follow [the manual evaluation guide](docs/evaluation.md) and retain the results.
 
@@ -69,11 +70,12 @@ Use Node.js **≥ 18**. Build e testes usam módulos nativos do Node; não há d
 | Mudança | Fonte |
 | --- | --- |
 | Identidade, papéis, fluxo, interação ou guardrails | `core/` |
+| Fluxo de uma skill ou seleção de referências | `workflows/` e `scripts/packages.mjs` |
 | Referências de engenharia | `knowledge/` e seu índice |
 | Formatos, orçamentos ou caminhos dos adaptadores | `scripts/` |
 | Instalação, exemplos ou avaliação | `docs/`, `examples/` ou READMEs |
 
-**Nunca edite `adapters/` manualmente.** Os arquivos são gerados e a validação rejeita divergências. Preserve a compatibilidade de cada plataforma ao alterar o gerador.
+**Nunca edite `adapters/` ou `packages/` manualmente.** Os arquivos são gerados e a validação rejeita divergências. Preserve a compatibilidade de cada plataforma ao alterar o gerador.
 
 ### Fluxo
 
@@ -89,7 +91,7 @@ npm run build
 npm run check
 ```
 
-`npm run check` executa testes e validação **sem regenerar** os adaptadores. Assim, a CI detecta arquivos versionados desatualizados. Para investigar falhas, execute `npm test` ou `npm run validate` separadamente.
+`npm run check` executa testes e validação **sem regenerar** os adaptadores. Assim, a CI detecta arquivos versionados desatualizados. Para investigar falhas, execute `npm test` ou `npm run validate` separadamente. Use `npm run demo` para as três demonstrações e `npm pack --ignore-scripts` para um arquivo local do instalador; o empacotamento não publica em um registro npm.
 
 A CI executa as verificações em Linux e Windows com Node 18 e 22. Um resultado verde comprova os contratos e os exemplos executáveis cobertos pelos testes. Para avaliar respostas dos modelos, siga [o guia de avaliação manual](docs/evaluation.md) e guarde os resultados.
 
